@@ -1,0 +1,11 @@
+-- Aufgabe 7a
+SELECT m1.YEAR, m1.TITLE, m1.RANK
+FROM
+    dbp068.avgRatedMovies as m1
+    JOIN (
+        SELECT m2.YEAR, max(m2.RANK) AS RANK 
+        FROM dbp068.avgRatedMovies AS m2 
+        GROUP BY m2.YEAR
+    ) AS maxRank
+    ON m1.YEAR = maxRank.YEAR AND m1.RANK = maxRank.RANK
+ORDER BY m1.YEAR ASC;

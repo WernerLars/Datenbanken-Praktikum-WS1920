@@ -1,0 +1,10 @@
+-- Aufgabe 8a
+SELECT avg(ac.numberOfActors) AS AMOUNT
+FROM (
+    SELECT count(m2a.actorid) AS numberOfActors
+    FROM dbmaster.movies2actors AS m2a
+         JOIN dbmaster.genres AS g
+         ON m2a.movieid = g.movieid
+    WHERE g.genre = 'Horror'
+    GROUP BY m2a.movieid
+    ) AS ac;

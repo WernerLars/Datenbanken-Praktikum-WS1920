@@ -1,0 +1,10 @@
+-- Aufgabe 8e
+SELECT DISTINCT w.name
+FROM dbmaster.writers AS w
+     JOIN dbmaster.movies2writers AS m2w
+     ON w.writerid = m2w.writerid
+     JOIN dbmaster.movies AS m
+     ON m2w.movieid = m.movieid
+GROUP BY w.name
+HAVING min(m.year) >= 1920 AND
+       max(m.year) <= 1929;

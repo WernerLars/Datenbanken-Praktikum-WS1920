@@ -1,0 +1,5 @@
+-- Aufgabe 7b
+SELECT wdm.TITLE, count(*) AS AMOUNT
+FROM dbp068.waltDisneyMovies as wdm
+GROUP BY wdm.TITLE
+HAVING count(*) <= 2;

@@ -1,0 +1,11 @@
+-- Aufgabe 8c
+WITH actorsInMovie (MOVIEID, AMOUNT) AS (
+    SELECT m2a.movieid, count(*)
+    FROM dbmaster.movies2actors AS m2a
+    GROUP BY m2a.movieid)
+
+SELECT m.title, aim.AMOUNT
+FROM dbmaster.movies AS m
+     JOIN actorsInMovie AS aim
+     ON m.movieid = aim.movieid
+WHERE aim.AMOUNT = (SELECT max(AMOUNT) FROM actorsInMovie);

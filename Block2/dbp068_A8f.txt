@@ -1,0 +1,17 @@
+-- Aufgabe 8f
+SELECT *
+FROM
+    (SELECT m1.title, m1.year, d.name, 'Director' AS ROLE
+     FROM dbmaster.directors AS d
+          JOIN dbmaster.movies2directors AS m2d
+          ON d.directorid = m2d.directorid
+          JOIN dbmaster.movies AS m1
+          ON m2d.movieid = m1.movieid)
+    UNION 
+    (SELECT m2.title, m2.year, a.name, 'Actor' AS ROLE
+     FROM dbmaster.actors AS a
+          JOIN dbmaster.movies2actors AS m2a
+          ON a.actorid = m2a.actorid
+          JOIN dbmaster.movies as m2
+          ON m2a.movieid = m2.movieid)
+ORDER BY title DESC;

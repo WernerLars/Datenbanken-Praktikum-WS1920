@@ -1,0 +1,13 @@
+-- Aufgabe 6b
+CREATE VIEW dbp068.waltDisneyMovies(MOVIEID, TITLE, GENRE) AS (
+    SELECT m.movieid, m.title, g.genre
+    FROM 
+        dbmaster.movies AS m
+        JOIN dbmaster.movies2producers AS m2p
+        ON m.movieid = m2p.movieid
+        JOIN dbmaster.producers AS p
+        ON m2p.producerid = p.producerid
+        JOIN dbmaster.genres AS g
+        ON g.movieid = m.movieid
+    WHERE p.name = 'Disney, Walt'
+);

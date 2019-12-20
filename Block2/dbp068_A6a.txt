@@ -1,0 +1,8 @@
+-- Aufgabe 6a
+CREATE VIEW dbp068.avgRatedMovies(MOVIEID, TITLE, YEAR, RANK) AS (
+    SELECT mov.movieid, mov.title, mov.year, rat.rank
+    FROM dbmaster.movies AS mov 
+         JOIN dbmaster.ratings AS rat
+         ON mov.movieid = rat.movieid
+    WHERE rat.rank > (SELECT avg(r.rank) AS rank FROM dbmaster.ratings AS r)
+);

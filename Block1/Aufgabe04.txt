@@ -1,0 +1,101 @@
+CREATE DATABASE ProjectFunder;
+
+CREATE TABLE Benutzer (
+    EMail           VARCHAR(100) NOT NULL,
+    Name            VARCHAR(50) NOT NULL,
+    Beschreibung    CLOB,
+    PRIMARY KEY (EMail)
+);
+
+CREATE TABLE Konto (
+    KontoID         INTEGER NOT NULL GENERATED ALWAYS AS IDENTITY,
+    EMail           VARCHAR(100) NOT NULL,
+    Guthaben        DECIMAL(12, 2) NOT NULL CHECK (Guthaben >= 0),
+    Geheimzahl      SMALLINT NOT NULL,
+    PRIMARY KEY (KontoID),
+    FOREIGN KEY (EMail) REFERENCES Benutzer(EMail)
+);
+
+CREATE TABLE Projekt (
+    ProjektID       INTEGER NOT NULL GENERATED ALWAYS AS IDENTITY,
+    Titel           VARCHAR(100) NOT NULL,
+    Finanzierungslimit   DECIMAL(12, 2) NOT NULL CHECK (Finanzierungslimit > 0),
+    Beschreibung    CLOB,
+    Status          VARCHAR(11) NOT NULL CHECK (Status in ('offen', 'geschlossen')),
+    PRIMARY KEY (ProjektID)
+);
+
+CREATE TABLE Kategorie (
+    KategorieID     INTEGER NOT NULL GENERATED ALWAYS AS IDENTITY,
+    Name            VARCHAR(100) NOT NULL,
+    Icon            VARCHAR(200) NOT NULL,
+    PRIMARY KEY (KategorieID)
+);
+
+CREATE TABLE Kommentar (
+    KommentarID     INTEGER NOT NULL GENERATED ALWAYS AS IDENTITY,
+    Text            CLOB NOT NULL,
+    Erstellungsdatum   DATE NOT NULL,
+    Sichtbarkeit    VARCHAR(11) NOT NULL CHECK (Sichtbarkeit in ('oeffentlich', 'privat')),
+    PRIMARY KEY (KommentarID)
+);
+
+CREATE TABLE spendet (
+    EMail           VARCHAR(100) NOT NULL,
+    ProjektID       INTEGER NOT NULL,
+    Betrag          DECIMAL(12, 2) NOT NULL CHECK (Betrag > 0),
+    Privatsphaere   VARCHAR(11) NOT NULL CHECK (Privatsphaere in ('oeffentlich', 'anonym')),
+    PRIMARY KEY (EMail, ProjektID),
+    FOREIGN KEY (EMail) REFERENCES Benutzer(EMail),
+    FOREIGN KEY (ProjektID) REFERENCES Projekt(ProjektID)
+);
+
+CREATE TABLE erstellt (
+    EMail           VARCHAR(100) NOT NULL,
+    ProjektID       INTEGER NOT NULL,
+    PRIMARY KEY (EMail, ProjektID),
+    FOREIGN KEY (EMail) REFERENCES Benutzer(EMail),
+    FOREIGN KEY (ProjektID) REFERENCES Projekt(ProjektID)
+);
+
+CREATE TABLE schreibt (
+    EMail           VARCHAR(100) NOT NULL,
+    ProjektID       INTEGER NOT NULL,
+    KommentarID     INTEGER NOT NULL,
+    PRIMARY KEY (EMail, ProjektID, KommentarID),
+    FOREIGN KEY (EMail) REFERENCES Benutzer(EMail),
+    FOREIGN KEY (ProjektID) REFERENCES Projekt(ProjektID),
+    FOREIGN KEY (KommentarID) REFERENCES Kommentar(Kommentar)
+);
+
+CREATE TABLE zugeordnet (
+    KategorieID     INTEGER NOT NULL,
+    ProjektID       INTEGER NOT NULL,
+    PRIMARY KEY (KategorieID, ProjektID),
+    FOREIGN KEY (KategorieID) REFERENCES Kategorie(KategorieID),
+    FOREIGN KEY (ProjektID) REFERENCES Projekt(ProjektID),
+);
+
+CREATE TABLE ist_vorgaenger (
+    VorgaengerID    INTEGER NOT NULL,
+    NachfolgerID    INTEGER NOT NULL,
+    PRIMARY KEY (VorgaengerID, NachfolgerID)
+);
+
+
+INSERT INTO Kategorie (Name, Icon) 
+VALUES 
+    ('Health & Wellness', 'Icon_1'), 
+    ('Art & Creative Works', 'Icon_2'), 
+    ('Education', 'Icon_3'), 
+    ('Tech & Innovation', 'Icon_4');
+
+
+CREATE TRIGGER finanzierungslimit_erreicht
+AFTER INSERT ON spendet
+REFERENCING NEW AS neu
+FOR EACH ROW MODE DB2SQL
+UPDATE Projekt AS p
+SET p.Finazierungslimit = 'geschlossen'
+FROM (SELECT SUM(sp.Betrag) AS Limit FROM spendet AS sp WHERE sp.ProjektID = p.ProjektID) AS s
+WHERE p.Finanzierungslimit <= s.Limit;

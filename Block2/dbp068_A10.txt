@@ -1,0 +1,48 @@
+-- Aufgabe 10a
+
+CREATE TRIGGER dbp068.trigger1
+AFTER INSERT ON dbmaster.ratings
+REFERENCING NEW AS new
+            NEW_TABLE AS new_table
+FOR EACH ROW MODE DB2SQL
+BEGIN ATOMIC
+    DECLARE ANZAHLBEWERTUNGEN INTEGER;
+    DECLARE MID INTEGER;
+    DECLARE MTITLE VARCHAR(400);
+    DECLARE MYEAR VARCHAR(100);
+    SET ANZAHLBEWERTUNGEN = (SELECT COUNT(*) 
+                FROM new_table
+                WHERE new_table.movieid = new.movieid);
+    IF ANZAHLBEWERTUNGEN = 100
+    THEN
+        SET MID = new.movieid;
+        SET MTITLE = (SELECT title 
+                      FROM movies
+                      where movieid = new.movieid);
+        SET MYEAR = (SELECT year 
+                     FROM movies
+                     where movieid = new.movieid);                                      
+        INSERT INTO dbp068.frequentRatedMovies (Movieid,Title,Year)
+        VALUES (MID,MTITLE,MYEAR);
+    END IF;
+END
+
+
+-- Aufgabe 10b
+
+CREATE TRIGGER dbp068.trigger2
+AFTER DELETE ON dbmaster.ratings
+REFERENCING OLD AS old
+            OLD_TABLE AS old_table
+FOR EACH ROW MODE DB2SQL
+BEGIN ATOMIC
+    DECLARE ANZAHLBEWERTUNGEN INTEGER;
+    SET ANZAHLBEWERTUNGEN = (SELECT COUNT(*) 
+                             FROM old_table 
+                             WHERE old_table.movieid = old.movieid);
+    IF ANZAHLBEWERTUNGEN = 100
+    THEN 
+        DELETE FROM dbp068.frequentRatedMovies 
+        WHERE movieid = old.movieid;
+    END IF;
+END

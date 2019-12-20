@@ -1,0 +1,49 @@
+-----NODE DIRECTORY-----
+
+Knotenverzeichnis
+
+ Anzahl Einträge im Verzeichnis = 1
+
+Eintrag für Knoten 1:
+
+ Knotenname                                                      = DBMASTER
+ Kommentar                                                       =
+ Verzeichniseintragungsart                                       = LOCAL
+ Protokoll                                                       = TCPIP
+ Hostname                                                        = bijou.is.inf.uni-due.de
+ Servicename                                                     = 50005
+ 
+ 
+ 
+ 
+ 
+ 
+-----DATABASE DIRECTORY-----
+
+Systemdatenbankverzeichnis
+
+ Anzahl Einträge im Verzeichnis = 2
+
+Eintrag für Datenbank 1:
+
+ Aliasname der Datenbank                                         = FUNDER
+ Datenbankname                                                   = FUNDER
+ Lokales Datenbankverzeichnis                                    = /home/dbp068
+ Release-Level der Datenbank                                     = d.00
+ Kommentar                                                       =
+ Verzeichniseintragungsart                                       = Indirekt
+ Datenbankpartitionsnummer für Katalog                           = 0
+ Hostname des Alternativservers                                  =
+ Portnummer des Alternativservers                                =
+
+Eintrag für Datenbank 2:
+
+ Aliasname der Datenbank                                         = IMDB
+ Datenbankname                                                   = IMDB
+ Knotenname                                                      = DBMASTER
+ Release-Level der Datenbank                                     = d.00
+ Kommentar                                                       =
+ Verzeichniseintragungsart                                       = Fern
+ Datenbankpartitionsnummer für Katalog                           = -1
+ Hostname des Alternativservers                                  =
+ Portnummer des Alternativservers                                =

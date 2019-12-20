@@ -1,0 +1,11 @@
+-- Aufgabe 8b
+SELECT d.name AS NAME, d.gross/mc.amount AS MEAN_GROSS
+FROM 
+    dbmaster.directors AS d
+    JOIN (
+        SELECT m2d.directorid, count(m2d.movieid) AS amount
+        FROM dbmaster.movies2directors AS m2d
+        GROUP BY m2d.directorid
+    ) AS mc
+    ON d.directorid = mc.directorid
+ORDER BY MEAN_GROSS DESC;

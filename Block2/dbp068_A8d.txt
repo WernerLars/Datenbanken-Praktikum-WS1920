@@ -1,0 +1,10 @@
+-- Aufgabe 8d
+SELECT DISTINCT d.name
+FROM dbmaster.directors AS d 
+     JOIN dbmaster.actors AS a
+     ON d.name = a.name
+     JOIN dbmaster.movies2actors AS m2a
+     ON m2a.actorid = a.actorid
+     JOIN dbmaster.movies2directors AS m2d
+     ON m2d.directorid = d.directorid
+WHERE m2d.movieid = m2a.movieid;

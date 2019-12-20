@@ -1,0 +1,10 @@
+-- Aufgabe 8g
+SELECT mpg.genre, mpg.movies_per_genre, 100.0*mpg.movies_per_genre/t.total AS MARKET_SHARE
+FROM (SELECT g1.genre, count(*) AS movies_per_genre 
+      FROM dbmaster.genres AS g1 
+      GROUP BY g1.genre
+     ) AS mpg,
+     (SELECT count(*) AS total
+      FROM (SELECT DISTINCT g2.movieid 
+            FROM dbmaster.genres AS g2)
+     ) AS t;
