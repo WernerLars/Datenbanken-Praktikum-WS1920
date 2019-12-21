@@ -1,24 +1,28 @@
 -- Aufgabe 9
-WITH plays_in(NAME, MOVIEID) AS (
-    SELECT a.name, m2a.movieid
-    FROM dbmaster.actors AS a
-         JOIN dbmaster.movies2actors AS m2a
-         ON a.actorid = m2a.actorid
-), 
 
-kevin_bacon(ACTOR, BACON_NUMBER) AS (
-    SELECT p2.name, 0
-    FROM plays_in AS p1 JOIN plays_in AS p2
-         ON p1.movieid = p2.movieid
-    WHERE p1.name = 'Bacon, Kevin (I)' AND
-          p2.name != 'Bacon, Kevin (I)'
+WITH ACTORNAMES(NAME , ACTORID , MOVIEID) AS (
+    SELECT A.NAME , A.ACTORID , M2A.MOVIEID
+    FROM DBMASTER.ACTORS AS A 
+         JOIN 
+         DBMASTER.MOVIES2ACTORS AS M2A
+         ON A.ACTORID = M2A.ACTORID
+),
 
-    UNION ALL
+KEVIN_BACON(NAME , ACTORID , BACON_NUMBER) AS (
+        SELECT NAME , ACTORID , 0 AS BACON_NUMBER
+        FROM ACTORNAMES
+        WHERE NAME = 'Bacon, Kevin (I)'	
 
-    SELECT p.name, kb.bacon_number+1
-    FROM kevin_bacon AS kb, plays_in AS p
-    WHERE p.name = kb.actor AND
-          kb.bacon_number < 2
+    UNION ALL	
+
+        SELECT AN2.NAME , AN2.ACTORID , KB.BACON_NUMBER + 1		
+        FROM KEVIN_BACON AS KB , ACTORNAMES AS AN1 ,  ACTORNAMES AS AN2
+        WHERE KB.ACTORID = AN1.ACTORID AND
+              AN1.MOVIEID = AN2.MOVIEID AND
+              AN1.ACTORID <> AN2.ACTORID AND		      
+              KB.BACON_NUMBER < 2
 )
 
-SELECT DISTINCT * FROM kevin_bacon;
+SELECT DISTINCT NAME , MIN(BACON_NUMBER)
+FROM KEVIN_BACON 
+GROUP BY NAME;
