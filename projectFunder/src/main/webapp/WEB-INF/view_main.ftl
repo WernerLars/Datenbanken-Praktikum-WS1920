@@ -1,7 +1,7 @@
 <html>
 	<head><title>Main</title></head>
 	<body>
-	
+			
 		<h1 align="center"> ProjectFunder </h1>
 
 		<a href="./view_profile" target="_blank">
@@ -16,11 +16,11 @@
 	    <#list offene_Projekte as o>
 	    
 	    
-	    <img src="icons/tech.png" heigth="250" width="250">
+	    <img src="${o.icon}" alt="icon" heigth="512" width="512">
 	    <a href="./view_project" target="_blank">
 	    	<h3>${o.titel}</h3>
 	    </a>
-	    <a href="./view_profile" target="_blank">
+	    <a href="../icons/art.png" target="_blank">
 			<p>von: ${o.ersteller}</p>
 		</a>
 		<p>Aktuell: ${o.spendensumme} &euro; </p>
@@ -32,7 +32,7 @@
 
 		<#list geschlossene_Projekte as g>
 	    
-	    <img src="icons/tech.png" heigth="250" width="250">
+	    <img src="%{g.icon}" alt="icon" heigth="512" width=512">
 	    <a href="./view_project" target="_blank">
 	    	<h3>${g.titel}</h3>
 	    </a>
