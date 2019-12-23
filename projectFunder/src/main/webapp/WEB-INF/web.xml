@@ -67,6 +67,16 @@
 		<servlet-name>projectFunder_servlet</servlet-name>
 		<url-pattern>/projectFunder</url-pattern>
 	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>new_project</servlet-name>
+		<servlet-class>de.unidue.inf.is.New_ProjectServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>new_project</servlet-name>
+		<url-pattern>/new_project</url-pattern>
+	</servlet-mapping>
 
 	<!-- Prevent the visiting of MVC Views from outside the servlet container. 
 		RequestDispatcher.forward/include should and will still work. Removing this 
