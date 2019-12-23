@@ -20,7 +20,7 @@
 	    <a href="./view_project" target="_blank">
 	    	<h3>${o.titel}</h3>
 	    </a>
-	    <a href="../icons/art.png" target="_blank">
+	    <a href="./view_profile" target="_blank">
 			<p>von: ${o.ersteller}</p>
 		</a>
 		<p>Aktuell: ${o.spendensumme} &euro; </p>
