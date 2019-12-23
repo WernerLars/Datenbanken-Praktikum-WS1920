@@ -1,6 +1,7 @@
 package de.unidue.inf.is;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -26,6 +27,7 @@ public final class View_MainServlet extends HttpServlet{
 	
 	private static List<ViewProject> geschlossen = new ArrayList<>();
 	
+	
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		
@@ -47,7 +49,13 @@ public final class View_MainServlet extends HttpServlet{
 			String titel = rs.getString("TITEL");
 			String icon = rs.getString("ICON");
 			String name = rs.getString("NAME");
-			Integer spendensumme = rs.getInt("Spendensumme");			
+			BigDecimal spendensumme = rs.getBigDecimal("SPENDENSUMME");
+			
+			if(spendensumme == null) {
+				spendensumme = new BigDecimal("0");
+			}
+			
+			
 			ViewProject vp = new ViewProject(titel,icon,name,spendensumme);
 
 			if(status.equals("offen")) {

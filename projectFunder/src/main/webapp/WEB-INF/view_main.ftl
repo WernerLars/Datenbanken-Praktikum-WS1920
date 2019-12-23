@@ -15,10 +15,16 @@
 
 	    <#list offene_Projekte as o>
 	    
-	    <h3>${o.titel}</h3>
-		<p>von: ${o.ersteller}</p>
+	    
+	    <img src="icons/tech.png" heigth="250" width="250">
+	    <a href="./view_project" target="_blank">
+	    	<h3>${o.titel}</h3>
+	    </a>
+	    <a href="./view_profile" target="_blank">
+			<p>von: ${o.ersteller}</p>
+		</a>
 		<p>Aktuell: ${o.spendensumme} &euro; </p>
-
+		<p>__________________________________________________________________</p>
     	</#list>
 
 
@@ -26,8 +32,13 @@
 
 		<#list geschlossene_Projekte as g>
 	    
-	    <h3>${g.titel}</h3>
-		<p>von: ${g.ersteller}</p>
+	    <img src="icons/tech.png" heigth="250" width="250">
+	    <a href="./view_project" target="_blank">
+	    	<h3>${g.titel}</h3>
+	    </a>
+	    <a href="./view_profile" target="_blank">
+			<p>von: ${g.ersteller}</p>
+		</a>
 		<p>Aktuell: ${g.spendensumme} &euro; </p>
 		
     	</#list>

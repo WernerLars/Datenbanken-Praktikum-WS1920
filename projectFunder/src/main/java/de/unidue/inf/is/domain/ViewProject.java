@@ -1,17 +1,19 @@
 package de.unidue.inf.is.domain;
 
+import java.math.BigDecimal;
+
 public final class ViewProject {
 	
 	private String Titel;
 	private String Icon;
 	private String Ersteller;
-	private int Spendensumme;
+	private BigDecimal Spendensumme;
 	
 	public ViewProject() {
 		
 	}
 	
-	public ViewProject(String titel,String icon,String ersteller, int spendensumme) {
+	public ViewProject(String titel,String icon,String ersteller, BigDecimal spendensumme) {
 		this.Titel = titel;
 		this.Icon = icon;
 		this.Ersteller = ersteller;
@@ -30,17 +32,10 @@ public final class ViewProject {
 		return Ersteller;
 	}
 
-	public int getSpendensumme() {
+	public BigDecimal getSpendensumme() {
 		return Spendensumme;
 	}
 
-	@Override
-	public String toString() {
-		return "ViewProject [Titel=" + Titel + ", Icon=" + Icon + ", Ersteller=" + Ersteller + ", Spendensumme="
-				+ Spendensumme + "]";
-	}
-
-	
 	
 	
 
