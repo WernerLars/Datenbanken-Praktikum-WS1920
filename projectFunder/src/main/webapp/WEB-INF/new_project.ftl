@@ -66,7 +66,11 @@
 						</tr>
 						<tr>
 							<td>Vorgänger</td>
-							<td></td>
+							<td>
+								<#list projects as project>
+									<input type="radio" name="pred" value=${project["kennung"]}> ${project["titel"]}<br>
+								</#list>
+							</td>
 						</tr>
 						<tr>
 							<td>Beschreibung</td>
