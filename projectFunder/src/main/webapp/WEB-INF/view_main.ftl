@@ -32,7 +32,7 @@
 
 		<#list geschlossene_Projekte as g>
 	    
-	    <img src="%{g.icon}" alt="icon" heigth="512" width=512">
+	    <img src="${g.icon}" alt="icon" heigth="512" width=512">
 	    <a href="./view_project" target="_blank">
 	    	<h3>${g.titel}</h3>
 	    </a>
