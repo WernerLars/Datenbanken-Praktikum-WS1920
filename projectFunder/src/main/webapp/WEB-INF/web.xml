@@ -78,7 +78,15 @@
 		<url-pattern>/view_main</url-pattern>
 	</servlet-mapping>
 	
+	<servlet>
+		<servlet-name>view_project_servlet</servlet-name>
+		<servlet-class>de.unidue.inf.is.View_ProjectServlet</servlet-class>
+	</servlet>
 	
+	<servlet-mapping>
+		<servlet-name>view_project_servlet</servlet-name>
+		<url-pattern>/view_project</url-pattern>
+	</servlet-mapping>
 	
 
 	<!-- Prevent the visiting of MVC Views from outside the servlet container. 

@@ -49,7 +49,7 @@ body{
 		<div id="header">
 		<h1> ProjectFunder </h1>
 		</div>
-		<a href="./view_profile" target="_blank">
+		<a href="./view_profile?ersteller=dummy@dummy.de" target="_blank">
 			<button type="button" style="background-color:blue;border-color:black;color:white;height:30px;width:100px">
 				Mein Profil
 			</button>
@@ -62,10 +62,10 @@ body{
 	    <hr>
 	  
 	    <img src="${o.icon}" alt="icon" >
-	    <a href="./view_project" target="_blank">
+	    <a href="./view_project?kennung=${o.kennung}" target="_blank">
 	    	<h3>${o.titel}</h3>
 	    </a>
-	    <a href="./view_profile" target="_blank">
+	    <a href="./view_profile?ersteller=${o.ersteller}" target="_blank">
 			<p>von: ${o.ersteller}</p>
 		</a>
 		<p>Aktuell: ${o.spendensumme} &euro; </p>
@@ -82,10 +82,10 @@ body{
 	    <hr>
 	    
 	    <img src="${g.icon}" alt="icon">
-	    <a href="./view_project" target="_blank">
+	    <a href="./view_project?kennung=${g.kennung}" target="_blank">
 	    	<h3>${g.titel}</h3>
 	    </a>
-	    <a href="./view_profile" target="_blank">
+	    <a href="./view_profile?ersteller=${g.ersteller}" target="_blank">
 			<p>von: ${g.ersteller}</p>
 		</a>
 		<p>Aktuell: ${g.spendensumme} &euro; </p>
