@@ -47,9 +47,7 @@ public final class View_MainServlet extends HttpServlet{
 			
 		    String status = rs.getString("STATUS");
 			String titel = rs.getString("TITEL");
-			String icon = rs.getString("ICON");
-			icon = icon.substring(5);
-			
+			String icon = rs.getString("ICON");			
 			String name = rs.getString("NAME");
 			BigDecimal spendensumme = rs.getBigDecimal("SPENDENSUMME");
 			
