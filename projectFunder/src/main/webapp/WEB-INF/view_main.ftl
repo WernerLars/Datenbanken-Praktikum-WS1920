@@ -45,55 +45,79 @@ body{
 	
 	
 	<body>
-		<div id="wrapper">	
+	<div id="wrapper">	
 		<div id="header">
 		<h1> ProjectFunder </h1>
 		</div>
+		
+		<br><br>
+		
 		<a href="./view_profile?ersteller=dummy@dummy.de" target="_blank">
 			<button type="button" style="background-color:blue;border-color:black;color:white;height:30px;width:100px">
 				Mein Profil
 			</button>
 		</a>
+		
+		<br><br>
+		<div id="header">
+			<h1> Offene Projekte </h1>
+		</div>
 
-		<h2> Offene Projekte </h2>
 
 	    <#list offene_Projekte as o>
 	    
-	    <hr>
+		<br><br>
 	  
 	    <img src="${o.icon}" alt="icon" >
 	    <a href="./view_project?kennung=${o.kennung}" target="_blank">
-	    	<h3>${o.titel}</h3>
+	    	<h2>${o.titel}</h2>
 	    </a>
-	    <a href="./view_profile?ersteller=${o.ersteller}" target="_blank">
-			<p>von: ${o.ersteller}</p>
-		</a>
-		<p>Aktuell: ${o.spendensumme} &euro; </p>
+	    
+	    <h2>von:
+	    	<a href="./view_profile?ersteller=${o.ersteller}" target="_blank">
+				${o.ersteller}</a>
+		</h2>
 
+		<h2>Aktuell: ${o.spendensumme} &euro; </h2>
+		
+		<br><br>
 		<hr>
+
+	
 		
     	</#list>
 
+		
+		<br><br>
+		<div id="header">
+			<h1> Abgeschlossene Projekte </h1>
+		</div>
+		<br><br>
 
-		<h2> Abgeschlossene Projekte </h2>
-
+		
 		<#list geschlossene_Projekte as g>
-	    
-	    <hr>
+	    <br><br>
+
 	    
 	    <img src="${g.icon}" alt="icon">
 	    <a href="./view_project?kennung=${g.kennung}" target="_blank">
-	    	<h3>${g.titel}</h3>
+	    	<h2>${g.titel}</h2>
 	    </a>
-	    <a href="./view_profile?ersteller=${g.ersteller}" target="_blank">
-			<p>von: ${g.ersteller}</p>
-		</a>
-		<p>Aktuell: ${g.spendensumme} &euro; </p>
+	    
+	    <h2>von: <a href="./view_profile?ersteller=${g.ersteller}" target="_blank">
+				${g.ersteller} </a>
+		</h2>
+
+
+		<h2>Aktuell: ${g.spendensumme} &euro; </h2>
 		
+		<br><br>
 		<hr>
 		
+		
     	</#list>
-
+    	
+		<br><br>
 		<div align="right">
 			<a href="./new_project" target="_blank">
 				<button type="button" style="background-color:blue; border-color:black; color:white;height:30px;width:100px">

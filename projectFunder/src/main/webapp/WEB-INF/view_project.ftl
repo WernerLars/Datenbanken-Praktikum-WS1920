@@ -46,25 +46,77 @@ body{
 	<div id="header">
 		<h1> Informationen </h1>
 	</div>
+	<br><br>
 	<div align="center">
 	<img src="${icon}" alt="icon" >
 
 	<h2>${titel}</h2>
 
-	<a href="./view_profile?ersteller=${ersteller}" target="_blank">
-			<p>von: ${ersteller}</p>
-	</a>
+	<h3>von: <a href="./view_profile?ersteller=${ersteller}" target="_blank">
+			 ${ersteller}</a>
+	</h3>
 	
-	<p>${beschreibung}</p>
+	<h3>${beschreibung}</h3>
 
 	</div>
+	<br><br>
+	
 	<h2>Finanzierungslimit: ${finanzierungslimit}</h2>
 	<h2>Aktuelle Spendensumme: ${spendensumme}</h2>
 	<h2>Status: ${status}</h2>
+
+	<h2>Vorgänger-Projekt: <a href="./view_project?kennung=${vorgaengerkennung}" target="_blank">
+				${vorgaengertitel}</a>
+	</h2>
+	
+	<br><br>
+	<div id="header">
+		<h1> Aktionsleiste </h1>
+	</div>
+	<br><br>
+	<a href="./new_project_fund" target="_blank">
+				<button type="button" style="background-color:green; border-color:black; color:white;height:30px;width:100px">
+					Spenden
+				</button>
+			</a>
+	<a href="./view_main" target="_blank">
+				<button type="button" style="background-color:red; border-color:black; color:white;height:30px;width:100px">
+					Projekt Löschen
+				</button>
+			</a>
+	<a href="./edit_project" target="_blank">
+				<button type="button" style="background-color:blue; border-color:black; color:white;height:30px;width:100px">
+					Projekt editieren
+				</button>
+			</a>
+	
+	
+	<br><br>
+	<div id="header">
+		<h1> Liste der Spender </h1>
+	</div>
+	
+	
+	
+	
+	
+	<br><br>
+	<div id="header">
+		<h1> Kommentare </h1>
+	</div>
 	
 
-	<hr>
 
+
+
+	<br><br>
+	<div align="right">
+			<a href="./new_comment" target="_blank">
+				<button type="button" style="background-color:blue; border-color:black; color:white;height:30px;width:100px">
+					Kommentieren
+				</button>
+			</a>
+		</div>
 
 
 </div>

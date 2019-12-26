@@ -15,8 +15,6 @@ import javax.servlet.http.HttpServletResponse;
 import de.unidue.inf.is.domain.ViewProject;
 import de.unidue.inf.is.utils.DBUtil;
 
-import java.util.ArrayList;
-import java.util.List;
 
 public class View_ProjectServlet extends HttpServlet{
 
@@ -24,11 +22,16 @@ public class View_ProjectServlet extends HttpServlet{
 	private String query;
 
 	private ViewProject vp;
+	
+	Integer kennung;
+	Integer vorgaengerkennung;
+	String vorgaengertitel;
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
 		query = req.getQueryString();
+		
 		
 		try {
 		
@@ -36,7 +39,8 @@ public class View_ProjectServlet extends HttpServlet{
 		
 		Statement st = con.createStatement();
 		
-		ResultSet rs = st.executeQuery("SELECT P.STATUS, P.BESCHREIBUNG, P.TITEL ,P.FINANZIERUNGSLIMIT, K.ICON , B.NAME , S.SPENDENSUMME "
+		ResultSet rs = st.executeQuery("SELECT P.KENNUNG, P.STATUS, P.BESCHREIBUNG, P.TITEL ,P.FINANZIERUNGSLIMIT, P.VORGAENGER , "
+				+ "K.ICON , B.NAME , S.SPENDENSUMME "
 				+ "FROM DBP068.PROJEKT AS P JOIN DBP068.KATEGORIE AS K ON P.KATEGORIE = K.ID "
 				+ "JOIN DBP068.BENUTZER AS B ON P.ERSTELLER = B.EMAIL "
 				+ "LEFT OUTER JOIN (SELECT PROJEKT , SUM(SPENDENBETRAG) AS SPENDENSUMME "
@@ -52,16 +56,33 @@ public class View_ProjectServlet extends HttpServlet{
 			String icon = rs.getString("ICON");
 			String ersteller = rs.getString("NAME");;
 			BigDecimal spendensumme = rs.getBigDecimal("SPENDENSUMME");
+			vorgaengerkennung = rs.getInt("VORGAENGER");
+			kennung = rs.getInt("KENNUNG");
 			
 			if(spendensumme == null) {
 				spendensumme = new BigDecimal("0");
 			}
 			
-
-			vp = new ViewProject(status,beschreibung,titel,fl,icon,ersteller,spendensumme);
 			
+			vp = new ViewProject(status,beschreibung,titel,fl,icon,ersteller,spendensumme);
+					
 
+			}
+		
+		if(vorgaengerkennung != 0) {
+			rs = st.executeQuery("SELECT TITEL FROM DBP068.PROJEKT WHERE KENNUNG ="+vorgaengerkennung);
+		
+			while(rs.next()) {
+				vorgaengertitel = rs.getString("TITEL");
+			}
+		
+		}else {
+			vorgaengertitel = "Kein Vorgänger vorhanden";
+			vorgaengerkennung = kennung;
 		}
+		
+		
+		
 			
 		}catch(SQLException e) {
 			e.printStackTrace();
@@ -74,7 +95,12 @@ public class View_ProjectServlet extends HttpServlet{
 		req.setAttribute("icon", vp.getIcon());
 		req.setAttribute("ersteller", vp.getErsteller());
 		req.setAttribute("spendensumme", vp.getSpendensumme());
+		
+		req.setAttribute("vorgaengertitel", vorgaengertitel);
+		req.setAttribute("vorgaengerkennung", vorgaengerkennung);
 
+	
+		
 		req.getRequestDispatcher("/view_project.ftl").forward(req, resp);
 			
 		
