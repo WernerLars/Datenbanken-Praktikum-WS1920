@@ -6,13 +6,17 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import de.unidue.inf.is.domain.ViewKommentar;
 import de.unidue.inf.is.domain.ViewProject;
+import de.unidue.inf.is.domain.ViewSpender;
 import de.unidue.inf.is.utils.DBUtil;
 
 
@@ -23,9 +27,12 @@ public class View_ProjectServlet extends HttpServlet{
 
 	private ViewProject vp;
 	
-	Integer kennung;
-	Integer vorgaengerkennung;
-	String vorgaengertitel;
+	private Integer kennung;
+	private Integer vorgaengerkennung;
+	private String vorgaengertitel;
+	
+	private static List<ViewSpender> spender = new ArrayList<>();
+	private static List<ViewKommentar> kommentare = new ArrayList<>();
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -82,8 +89,53 @@ public class View_ProjectServlet extends HttpServlet{
 		}
 		
 		
+		rs = st.executeQuery("SELECT S.SPENDENBETRAG , S.SICHTBARKEIT , B.NAME "
+				+ "FROM DBP068.SPENDEN AS S JOIN DBP068.BENUTZER AS B "
+				+ "ON S.SPENDER = B.EMAIL "
+				+ "WHERE S.PROJEKT = "+kennung+" ORDER BY S.SPENDENBETRAG DESC");
 		
+		
+		while(rs.next()) {
 			
+			
+			BigDecimal spendenbetrag = rs.getBigDecimal("SPENDENBETRAG");
+			String sichtbarkeit = rs.getString("SICHTBARKEIT");
+			String name = rs.getString("NAME");
+			
+			if(sichtbarkeit.equals("privat")) {
+				name = "Anonym";
+			}
+			
+			ViewSpender vs = new ViewSpender(spendenbetrag,name);
+			
+			spender.add(vs);		
+		}
+			
+		rs = st.executeQuery("SELECT K.TEXT, K.SICHTBARKEIT , B.NAME "
+				+ "FROM DBP068.SCHREIBT AS S JOIN DBP068.KOMMENTAR AS K "
+				+ "ON S.KOMMENTAR = K.ID "
+				+ "JOIN DBP068.BENUTZER AS B "
+				+ "ON S.BENUTZER = B.EMAIL "
+				+ "WHERE S.PROJEKT = "+kennung);
+		
+		while(rs.next()) {
+			
+			String text = rs.getString("TEXT");
+			String sichtbarkeit = rs.getString("SICHTBARKEIT");
+			String name = rs.getString("NAME");
+			
+			if(sichtbarkeit.equals("privat")) {
+				name = "Anonym";
+			}
+			
+			ViewKommentar vk = new ViewKommentar(text,name);
+			
+			kommentare.add(vk);
+			
+		}
+		
+		con.close();
+		
 		}catch(SQLException e) {
 			e.printStackTrace();
 		}
@@ -98,10 +150,15 @@ public class View_ProjectServlet extends HttpServlet{
 		
 		req.setAttribute("vorgaengertitel", vorgaengertitel);
 		req.setAttribute("vorgaengerkennung", vorgaengerkennung);
+		
+		req.setAttribute("spender", spender);
+		req.setAttribute("kommentare", kommentare);
 
-	
 		
 		req.getRequestDispatcher("/view_project.ftl").forward(req, resp);
+		
+		spender.clear();
+		kommentare.clear();
 			
 		
 	}

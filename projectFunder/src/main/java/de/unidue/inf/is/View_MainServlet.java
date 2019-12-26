@@ -41,7 +41,8 @@ public final class View_MainServlet extends HttpServlet{
 				+ "JOIN DBP068.BENUTZER AS B ON P.ERSTELLER = B.EMAIL "
 				+ "LEFT OUTER JOIN (SELECT PROJEKT , SUM(SPENDENBETRAG) AS SPENDENSUMME "
 				+ "FROM DBP068.SPENDEN GROUP BY PROJEKT) AS S "
-				+ "ON P.KENNUNG = S.PROJEKT");
+				+ "ON P.KENNUNG = S.PROJEKT "
+				+ "ORDER BY P.KENNUNG");
 		
 		while(rs.next()) {
 			
@@ -85,6 +86,9 @@ public final class View_MainServlet extends HttpServlet{
 		
 		
 		req.getRequestDispatcher("/view_main.ftl").forward(req, resp);
+		
+		offen.clear();
+		geschlossen.clear();
 		
 	}
 

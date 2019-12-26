@@ -74,21 +74,25 @@ body{
 		<h1> Aktionsleiste </h1>
 	</div>
 	<br><br>
-	<a href="./new_project_fund" target="_blank">
-				<button type="button" style="background-color:green; border-color:black; color:white;height:30px;width:100px">
-					Spenden
-				</button>
-			</a>
-	<a href="./view_main" target="_blank">
-				<button type="button" style="background-color:red; border-color:black; color:white;height:30px;width:100px">
-					Projekt Löschen
-				</button>
-			</a>
-	<a href="./edit_project" target="_blank">
-				<button type="button" style="background-color:blue; border-color:black; color:white;height:30px;width:100px">
-					Projekt editieren
-				</button>
-			</a>
+	
+
+ 		 <a href="./new_project_fund" target="_blank">
+			<button type="button" style="background-color:green; border-color:black; color:white;height:30px;width:100px">
+				Spenden
+			</button>
+		</a>
+
+ 	 	<a href="./view_main" target="_blank">
+			<button type="button" style="background-color:red; border-color:black; color:white;height:30px;width:100px">
+				Projekt Löschen
+			</button>
+		</a>
+ 		 <a href="./edit_project" target="_blank">
+			<button type="button" style="background-color:blue; border-color:black; color:white;height:30px;width:100px">
+				Projekt editieren
+			</button>
+		</a>
+ 
 	
 	
 	<br><br>
@@ -96,16 +100,24 @@ body{
 		<h1> Liste der Spender </h1>
 	</div>
 	
+	<br><br>
 	
+	<#list spender as s>
+		<h2>${s.name}: ${s.spendenbetrag}  </h2>
 	
-	
+	</#list>
 	
 	<br><br>
 	<div id="header">
 		<h1> Kommentare </h1>
 	</div>
 	
-
+	<br><br>
+	
+	<#list kommentare as k>
+		<h2>${k.name}: ${k.text}  </h2>
+	
+	</#list>
 
 
 
