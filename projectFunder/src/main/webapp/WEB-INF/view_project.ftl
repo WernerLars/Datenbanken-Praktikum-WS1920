@@ -65,9 +65,8 @@ body{
 	<h2>Aktuelle Spendensumme: ${spendensumme}</h2>
 	<h2>Status: ${status}</h2>
 
-	<h2>Vorgänger-Projekt: <a href="./view_project?kennung=${vorgaengerkennung}" target="_blank">
-				${vorgaengertitel}</a>
-	</h2>
+
+	<h2>Vorgänger-Projekt: ${code} <h2>
 	
 	<br><br>
 	<div id="header">
@@ -81,12 +80,13 @@ body{
 				Spenden
 			</button>
 		</a>
-
+		&nbsp;
  	 	<a href="./view_main" target="_blank">
 			<button type="button" style="background-color:red; border-color:black; color:white;height:30px;width:100px">
 				Projekt Löschen
 			</button>
 		</a>
+		&nbsp;
  		 <a href="./edit_project" target="_blank">
 			<button type="button" style="background-color:blue; border-color:black; color:white;height:30px;width:100px">
 				Projekt editieren

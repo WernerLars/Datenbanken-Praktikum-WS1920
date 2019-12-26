@@ -30,6 +30,7 @@ public class View_ProjectServlet extends HttpServlet{
 	private Integer kennung;
 	private Integer vorgaengerkennung;
 	private String vorgaengertitel;
+	private String code;
 	
 	private static List<ViewSpender> spender = new ArrayList<>();
 	private static List<ViewKommentar> kommentare = new ArrayList<>();
@@ -82,10 +83,13 @@ public class View_ProjectServlet extends HttpServlet{
 			while(rs.next()) {
 				vorgaengertitel = rs.getString("TITEL");
 			}
-		
+			
+			code = "<a href=\"./view_project?kennung="+vorgaengerkennung+"\" target=\"_blank\">"+vorgaengertitel+"</a></h2>";
+			
 		}else {
-			vorgaengertitel = "Kein Vorgänger vorhanden";
-			vorgaengerkennung = kennung;
+
+			code = "Kein Vorgänger vorhanden";		
+			
 		}
 		
 		
@@ -148,9 +152,9 @@ public class View_ProjectServlet extends HttpServlet{
 		req.setAttribute("ersteller", vp.getErsteller());
 		req.setAttribute("spendensumme", vp.getSpendensumme());
 		
-		req.setAttribute("vorgaengertitel", vorgaengertitel);
-		req.setAttribute("vorgaengerkennung", vorgaengerkennung);
 		
+		req.setAttribute("code", code);
+
 		req.setAttribute("spender", spender);
 		req.setAttribute("kommentare", kommentare);
 
