@@ -83,15 +83,19 @@ public final class New_ProjectServlet extends HttpServlet {
 
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		// Initialize possible error message
 		String errorMsg = "";
 		
+		// Check if title has 1 - 30 characters
 		String title = req.getParameter("title");
 		if (title == null || title.length() == 0 || title.length() > 30) {
 			errorMsg += "-> Titel muss zwischen 1 und 30 Zeichen lang sein.<br>";
 		}
 		
+		// Description has no constrains
 		String description = req.getParameter("description");
 		
+		// Try to create a BigInteger object from the input and check if the limit is at least greater 100
 		BigDecimal limit = null;
 		try {
 			limit = new BigDecimal(req.getParameter("limit"));
@@ -102,8 +106,10 @@ public final class New_ProjectServlet extends HttpServlet {
 			errorMsg += "-> Ungültiges oder kein Finanzierungslimit angegeben.<br>";
 		}
 		
+		// Creator is the current logged in user
 		String creator = USER_ID;
 		
+		// Check if pred can be interpreted as an Integer and or set null if pred = "None"
 		Integer pred = null;
 		try {
 			if (!req.getParameter("pred").equals("None")) {
@@ -113,13 +119,15 @@ public final class New_ProjectServlet extends HttpServlet {
 			errorMsg += "-> Ungültiger Vorgänger angegeben.<br>";
 		}
 		
-		int category = -1;
+		// Check if category can be interpreted as an Integer
+		Integer category = null;
 		try {
 			category = Integer.valueOf(req.getParameter("category"));
 		} catch (Exception e) {
 			errorMsg += "-> Keine oder ungültige Kategorie angegeben.<br>";
 		}
 		
+		// If errorsMsg != "" some errors occur and insertion aborted.
 		if (!errorMsg.equals("")) {
 			showPage(req, resp, "Fehler:<br>" + errorMsg);
 		} else {
@@ -127,24 +135,27 @@ public final class New_ProjectServlet extends HttpServlet {
 			try (
 					Connection con = DBUtil.getExternalConnection();
 					PreparedStatement psInsert = con.prepareStatement(sqlInsert)) {
+				// Set title
 				psInsert.setString(1, title);
+				// Set description
 				if (description == null || description.equals("")) {
 					psInsert.setNull(2, Types.CLOB);
 				} else {
 					psInsert.setString(2, description);
 				}
+				// Set limit
 				psInsert.setBigDecimal(3, limit);
+				psInsert.setString(4, creator);
 				if (pred == null) {
-					psInsert.setNull(4, Types.SMALLINT);
+					psInsert.setNull(5, Types.SMALLINT);
 				} else {
-					psInsert.setInt(4, pred);
+					psInsert.setInt(5, pred);
 				}
-				psInsert.setInt(5, category);
+				psInsert.setInt(6, category);
 				
 				psInsert.executeUpdate();
 			} catch (Exception e) {
-				e.printStackTrace();
-				showPage(req, resp, "Fehler:<br>-> Datenbankfehler. Probieren Sie es später erneut.<br>");
+				showPage(req, resp, "Datenbankfehler:<br>" + e.getMessage() + "<br>");
 			}
 		}
 	}
