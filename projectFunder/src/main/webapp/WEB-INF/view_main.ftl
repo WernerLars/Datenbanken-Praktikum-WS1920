@@ -53,7 +53,7 @@ body{
 		<br><br>
 		
 		<a href="./view_profile?ersteller=dummy@dummy.de" target="_blank">
-			<button type="button" style="background-color:blue;border-color:black;color:white;height:30px;width:100px">
+			<button type="button" style="background-color:blue;border-color:black;color:white;height:60;width:32.5%">
 				Mein Profil
 			</button>
 		</a>
@@ -119,8 +119,8 @@ body{
     	
 		<br><br>
 		<div align="right">
-			<a href="./new_project" target="_blank">
-				<button type="button" style="background-color:blue; border-color:black; color:white;height:30px;width:100px">
+			<a style="text-decoration:none" href="./new_project" target="_blank">
+				<button type="button" style="background-color:blue; border-color:black; color:white;height:60;width:32.5%">
 					Projekt erstellen
 				</button>
 			</a>

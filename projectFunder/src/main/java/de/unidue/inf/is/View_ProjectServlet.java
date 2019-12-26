@@ -84,7 +84,7 @@ public class View_ProjectServlet extends HttpServlet{
 				vorgaengertitel = rs.getString("TITEL");
 			}
 			
-			code = "<a href=\"./view_project?kennung="+vorgaengerkennung+"\" target=\"_blank\">"+vorgaengertitel+"</a></h2>";
+			code = "<a href=\"./view_project?kennung="+vorgaengerkennung+"\" target=\"_blank\">"+vorgaengertitel+"</a>";
 			
 		}else {
 
@@ -169,7 +169,7 @@ public class View_ProjectServlet extends HttpServlet{
 
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+
 		super.doGet(req, resp);
 	}
 	
