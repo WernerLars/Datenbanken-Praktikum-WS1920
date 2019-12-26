@@ -46,27 +46,22 @@ body{
 	<div id="header">
 		<h1> Informationen </h1>
 	</div>
-	
-	<#list project as pr>
-	
-	<img src="${pr.icon}" alt="icon" >
+	<div align="center">
+	<img src="${icon}" alt="icon" >
 
-	<h2>${pr.titel}</h2>
+	<h2>${titel}</h2>
 
-	<a href="./view_profile?ersteller=${pr.ersteller}" target="_blank">
-			<p>von: ${pr.ersteller}</p>
+	<a href="./view_profile?ersteller=${ersteller}" target="_blank">
+			<p>von: ${ersteller}</p>
 	</a>
 	
-	<p>${pr.beschreibung}</p>
+	<p>${beschreibung}</p>
 
+	</div>
+	<h2>Finanzierungslimit: ${finanzierungslimit}</h2>
+	<h2>Aktuelle Spendensumme: ${spendensumme}</h2>
+	<h2>Status: ${status}</h2>
 	
-	<h2>Finanzierungslimit: ${pr.finanzierungslimit}</h2>
-	<h2>Aktuelle Spendensumme: ${pr.spendensumme}</h2>
-	<h2>Status: ${pr.status}</h2>
-	
-	
-
-	</#list>
 
 	<hr>
 

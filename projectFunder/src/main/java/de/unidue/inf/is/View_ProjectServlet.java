@@ -23,9 +23,7 @@ public class View_ProjectServlet extends HttpServlet{
 	private static final long serialVersionUID = 1L;
 	private String query;
 
-	private List<ViewProject> project = new ArrayList<>();
-	
-	
+	private ViewProject vp;
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -60,17 +58,23 @@ public class View_ProjectServlet extends HttpServlet{
 			}
 			
 
-			ViewProject vp = new ViewProject(status,beschreibung,titel,fl,icon,ersteller,spendensumme);
+			vp = new ViewProject(status,beschreibung,titel,fl,icon,ersteller,spendensumme);
 			
-			project.add(vp);
-		
+
 		}
 			
 		}catch(SQLException e) {
 			e.printStackTrace();
 		}
 		
-		req.setAttribute("project", project);
+		req.setAttribute("status", vp.getStatus());
+		req.setAttribute("beschreibung", vp.getBeschreibung());
+		req.setAttribute("titel", vp.getTitel());
+		req.setAttribute("finanzierungslimit", vp.getFinanzierungslimit());
+		req.setAttribute("icon", vp.getIcon());
+		req.setAttribute("ersteller", vp.getErsteller());
+		req.setAttribute("spendensumme", vp.getSpendensumme());
+
 		req.getRequestDispatcher("/view_project.ftl").forward(req, resp);
 			
 		
