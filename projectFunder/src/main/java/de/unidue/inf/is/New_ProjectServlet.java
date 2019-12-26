@@ -1,10 +1,12 @@
 package de.unidue.inf.is;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -22,23 +24,37 @@ public final class New_ProjectServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private final String USER_ID = "dummy@dummy.com";
 
-	@Override
-	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		ArrayList<String> categories = new ArrayList<String>();
+	protected void showPage(HttpServletRequest req, HttpServletResponse resp, String errorMsg) throws ServletException, IOException {
+		ArrayList<Map<String, String>> categories = new ArrayList<Map<String, String>>();
 		ArrayList<Map<String, String>> projects = new ArrayList<Map<String, String>>();
+		
+		String sqlCategories = "SELECT id, name FROM dbp068.kategorie";
+		String sqlProjects = "SELECT kennung, titel FROM dbp068.projekt WHERE ersteller=?";
 		
 		try (
 				Connection con = DBUtil.getExternalConnection();
-				PreparedStatement psCategories = con.prepareStatement(
-						"SELECT name FROM dbp068.Kategorie");
-				PreparedStatement psProjects = con.prepareStatement(
-						"SELECT kennung, titel FROM dbp068.projekt WHERE ersteller=?")
-			) {
+				PreparedStatement psCategories = con.prepareStatement(sqlCategories);
+				PreparedStatement psProjects = con.prepareStatement(sqlProjects)) {
+			/* Get a list of all categories for the logged in user USER_ID and add them to a
+			 * list of maps with the following keys:
+			 * "id": Unique id of each category
+			 * "name": Name of each category
+			 */
 			ResultSet resCategories = psCategories.executeQuery();
 			while (resCategories.next()) {
-				categories.add(resCategories.getString("name"));
+				HashMap<String, String> c = new HashMap<String, String>();
+				
+				c.put("id", Integer.toString(resCategories.getInt("id")));
+				c.put("name", resCategories.getString("name"));
+				
+				categories.add(c);
 			}
 			
+			/* Get all projects of the logged in user USER_ID and add them to a list of maps
+			 * with the following keys:
+			 * "kennung": Unique id of each project
+			 * "titel": Title of each project
+			 */
 			psProjects.setString(1, USER_ID);
 			ResultSet resProjects = psProjects.executeQuery();
 			while (resProjects.next()) {
@@ -53,17 +69,83 @@ public final class New_ProjectServlet extends HttpServlet {
 			e.printStackTrace();
 		}
 		
+		req.setAttribute("errorMsg", errorMsg);
 		req.setAttribute("categories", categories);
 		req.setAttribute("projects", projects);
-		
+				
 		req.getRequestDispatcher("new_project.ftl").forward(req, resp);
+	}
+	
+	@Override
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		showPage(req, resp, "");
 	}
 
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		super.doPost(req, resp);
+		String errorMsg = "";
+		
+		String title = req.getParameter("title");
+		if (title == null || title.length() == 0 || title.length() > 30) {
+			errorMsg += "-> Titel muss zwischen 1 und 30 Zeichen lang sein.<br>";
+		}
+		
+		String description = req.getParameter("description");
+		
+		BigDecimal limit = null;
+		try {
+			limit = new BigDecimal(req.getParameter("limit"));
+			if  (limit.doubleValue() < 100) {
+				errorMsg += "-> Zu geringes Finanzierungslimit angegeben (mindestens 100€).<br>";
+			}
+		} catch (Exception e) {
+			errorMsg += "-> Ungültiges oder kein Finanzierungslimit angegeben.<br>";
+		}
+		
+		String creator = USER_ID;
+		
+		Integer pred = null;
+		try {
+			if (!req.getParameter("pred").equals("None")) {
+				pred = Integer.valueOf(req.getParameter("pred"));
+			}
+		} catch (Exception e) {
+			errorMsg += "-> Ungültiger Vorgänger angegeben.<br>";
+		}
+		
+		int category = -1;
+		try {
+			category = Integer.valueOf(req.getParameter("category"));
+		} catch (Exception e) {
+			errorMsg += "-> Keine oder ungültige Kategorie angegeben.<br>";
+		}
+		
+		if (!errorMsg.equals("")) {
+			showPage(req, resp, "Fehler:<br>" + errorMsg);
+		} else {
+			String sqlInsert = "INSERT INTO dbp068.projekt (titel, beschreibung, status, finanzierungslimit, ersteller, vorgaenger, kategorie) VALUES (?, ?, 'offen', ?, ?, ?, ?)";
+			try (
+					Connection con = DBUtil.getExternalConnection();
+					PreparedStatement psInsert = con.prepareStatement(sqlInsert)) {
+				psInsert.setString(1, title);
+				if (description == null || description.equals("")) {
+					psInsert.setNull(2, Types.CLOB);
+				} else {
+					psInsert.setString(2, description);
+				}
+				psInsert.setBigDecimal(3, limit);
+				if (pred == null) {
+					psInsert.setNull(4, Types.SMALLINT);
+				} else {
+					psInsert.setInt(4, pred);
+				}
+				psInsert.setInt(5, category);
+				
+				psInsert.executeUpdate();
+			} catch (Exception e) {
+				e.printStackTrace();
+				showPage(req, resp, "Fehler:<br>-> Datenbankfehler. Probieren Sie es später erneut.<br>");
+			}
+		}
 	}
-	
-	
 }

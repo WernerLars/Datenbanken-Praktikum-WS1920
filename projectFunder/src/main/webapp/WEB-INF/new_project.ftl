@@ -46,6 +46,7 @@
 				<h1>Projekt erstellen</h1>
 			</div>
 			<div id="site">
+				${errorMsg}
 				<form action="new_project" method="post">
 					<table>
 						<tr>
@@ -60,13 +61,14 @@
 							<td>Kategorie</td>
 							<td>
 								<#list categories as category>
-									<input type="radio" name="category" value=${category}> ${category}<br>
+									<input type="radio" name="category" value=${category["id"]}> ${category["name"]}<br>
 								</#list>
 							</td>
 						</tr>
 						<tr>
 							<td>Vorgänger</td>
 							<td>
+								<input type="radio" name="pred" value="None" checked> Kein Vorgänger<br>
 								<#list projects as project>
 									<input type="radio" name="pred" value=${project["kennung"]}> ${project["titel"]}<br>
 								</#list>
