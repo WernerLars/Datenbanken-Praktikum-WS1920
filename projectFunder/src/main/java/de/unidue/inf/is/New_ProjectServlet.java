@@ -145,14 +145,17 @@ public final class New_ProjectServlet extends HttpServlet {
 				}
 				// Set limit
 				psInsert.setBigDecimal(3, limit);
+				// Set creator
 				psInsert.setString(4, creator);
 				if (pred == null) {
 					psInsert.setNull(5, Types.SMALLINT);
 				} else {
 					psInsert.setInt(5, pred);
 				}
+				// Set category
 				psInsert.setInt(6, category);
 				
+				// Execute insert statement
 				psInsert.executeUpdate();
 			} catch (Exception e) {
 				showPage(req, resp, "Datenbankfehler:<br>" + e.getMessage() + "<br>");
