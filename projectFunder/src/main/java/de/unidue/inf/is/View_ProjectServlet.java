@@ -39,11 +39,8 @@ public class View_ProjectServlet extends HttpServlet{
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
 		query = req.getQueryString();
-		
-		System.out.println(query.substring(0, 8));
-		
-		if(query.substring(0, 8).equals("kennung=")) {
-		
+
+		if(query.substring(0, 8).equals("kennung=")) {		
 		
 		try {
 		
