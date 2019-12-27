@@ -3,9 +3,9 @@ package de.unidue.inf.is;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,21 +40,27 @@ public class View_ProjectServlet extends HttpServlet{
 
 		query = req.getQueryString();
 		
+		System.out.println(query.substring(0, 8));
+		
+		if(query.substring(0, 8).equals("kennung=")) {
+		
 		
 		try {
 		
 		Connection con = DBUtil.getExternalConnection();
 		
-		Statement st = con.createStatement();
-		
-		ResultSet rs = st.executeQuery("SELECT P.KENNUNG, P.STATUS, P.BESCHREIBUNG, P.TITEL ,P.FINANZIERUNGSLIMIT, P.VORGAENGER , "
+		PreparedStatement ps = con.prepareStatement("SELECT P.KENNUNG, P.STATUS, P.BESCHREIBUNG, P.TITEL ,P.FINANZIERUNGSLIMIT, P.VORGAENGER , "
 				+ "K.ICON , B.NAME , S.SPENDENSUMME "
 				+ "FROM DBP068.PROJEKT AS P JOIN DBP068.KATEGORIE AS K ON P.KATEGORIE = K.ID "
 				+ "JOIN DBP068.BENUTZER AS B ON P.ERSTELLER = B.EMAIL "
 				+ "LEFT OUTER JOIN (SELECT PROJEKT , SUM(SPENDENBETRAG) AS SPENDENSUMME "
 				+ "FROM DBP068.SPENDEN GROUP BY PROJEKT) AS S "
 				+ "ON P.KENNUNG = S.PROJEKT "
-				+ "WHERE P."+query);
+				+ "WHERE P.KENNUNG=?");
+		
+		ps.setString(1, query.substring(8));
+		
+		ResultSet rs = ps.executeQuery();
 		
 		while(rs.next()) {
 			String status = rs.getString("STATUS");
@@ -78,7 +84,12 @@ public class View_ProjectServlet extends HttpServlet{
 			}
 		
 		if(vorgaengerkennung != 0) {
-			rs = st.executeQuery("SELECT TITEL FROM DBP068.PROJEKT WHERE KENNUNG ="+vorgaengerkennung);
+			
+			ps = con.prepareStatement("SELECT TITEL FROM DBP068.PROJEKT WHERE KENNUNG = ?");
+			
+			ps.setString(1, ""+vorgaengerkennung);
+			
+			rs = ps.executeQuery();
 		
 			while(rs.next()) {
 				vorgaengertitel = rs.getString("TITEL");
@@ -92,11 +103,15 @@ public class View_ProjectServlet extends HttpServlet{
 			
 		}
 		
-		
-		rs = st.executeQuery("SELECT S.SPENDENBETRAG , S.SICHTBARKEIT , B.NAME "
+		ps = con.prepareStatement("SELECT S.SPENDENBETRAG , S.SICHTBARKEIT , B.NAME "
 				+ "FROM DBP068.SPENDEN AS S JOIN DBP068.BENUTZER AS B "
 				+ "ON S.SPENDER = B.EMAIL "
-				+ "WHERE S.PROJEKT = "+kennung+" ORDER BY S.SPENDENBETRAG DESC");
+				+ "WHERE S.PROJEKT = ? "
+				+ "ORDER BY S.SPENDENBETRAG DESC");
+		
+		ps.setString(1, ""+kennung);
+		
+		rs = ps.executeQuery();
 		
 		
 		while(rs.next()) {
@@ -114,13 +129,17 @@ public class View_ProjectServlet extends HttpServlet{
 			
 			spender.add(vs);		
 		}
-			
-		rs = st.executeQuery("SELECT K.TEXT, K.SICHTBARKEIT , B.NAME "
+		
+		ps = con.prepareStatement("SELECT K.TEXT, K.SICHTBARKEIT , B.NAME "
 				+ "FROM DBP068.SCHREIBT AS S JOIN DBP068.KOMMENTAR AS K "
 				+ "ON S.KOMMENTAR = K.ID "
 				+ "JOIN DBP068.BENUTZER AS B "
 				+ "ON S.BENUTZER = B.EMAIL "
-				+ "WHERE S.PROJEKT = "+kennung);
+				+ "WHERE S.PROJEKT = ?");
+		
+		ps.setString(1, ""+kennung);
+		
+		rs = ps.executeQuery();
 		
 		while(rs.next()) {
 			
@@ -164,7 +183,9 @@ public class View_ProjectServlet extends HttpServlet{
 		spender.clear();
 		kommentare.clear();
 			
-		
+		}else {
+			return;
+		}
 	}
 
 	@Override

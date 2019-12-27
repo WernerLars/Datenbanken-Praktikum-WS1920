@@ -3,9 +3,9 @@ package de.unidue.inf.is;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,15 +34,15 @@ public final class View_MainServlet extends HttpServlet{
 		try {
 		Connection con = DBUtil.getExternalConnection();
 		
-		Statement st = con.createStatement();
-		
-		ResultSet rs = st.executeQuery("SELECT P.STATUS, P.KENNUNG, P.TITEL , K.ICON , B.NAME , S.SPENDENSUMME "
+		PreparedStatement ps = con.prepareStatement("SELECT P.STATUS, P.KENNUNG, P.TITEL , K.ICON , B.NAME , S.SPENDENSUMME "
 				+ "FROM DBP068.PROJEKT AS P JOIN DBP068.KATEGORIE AS K ON P.KATEGORIE = K.ID "
 				+ "JOIN DBP068.BENUTZER AS B ON P.ERSTELLER = B.EMAIL "
 				+ "LEFT OUTER JOIN (SELECT PROJEKT , SUM(SPENDENBETRAG) AS SPENDENSUMME "
 				+ "FROM DBP068.SPENDEN GROUP BY PROJEKT) AS S "
 				+ "ON P.KENNUNG = S.PROJEKT "
 				+ "ORDER BY P.KENNUNG");
+		
+		ResultSet rs = ps.executeQuery();
 		
 		while(rs.next()) {
 			
