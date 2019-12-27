@@ -85,6 +85,8 @@ public final class View_MainServlet extends HttpServlet{
 		req.setAttribute("geschlossene_Projekte", geschlossen);
 		
 		
+		
+		
 		req.getRequestDispatcher("/view_main.ftl").forward(req, resp);
 		
 		offen.clear();

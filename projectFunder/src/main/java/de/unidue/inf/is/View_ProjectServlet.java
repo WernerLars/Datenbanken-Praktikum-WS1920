@@ -73,6 +73,9 @@ public class View_ProjectServlet extends HttpServlet{
 			if(spendensumme == null) {
 				spendensumme = new BigDecimal("0");
 			}
+			if(beschreibung == null) {
+				beschreibung = " ";
+			}
 			
 			
 			vp = new ViewProject(status,beschreibung,titel,fl,icon,ersteller,spendensumme);
@@ -167,7 +170,7 @@ public class View_ProjectServlet extends HttpServlet{
 		req.setAttribute("icon", vp.getIcon());
 		req.setAttribute("ersteller", vp.getErsteller());
 		req.setAttribute("spendensumme", vp.getSpendensumme());
-		
+		req.setAttribute("kennung", kennung);
 		
 		req.setAttribute("code", code);
 
@@ -180,8 +183,6 @@ public class View_ProjectServlet extends HttpServlet{
 		spender.clear();
 		kommentare.clear();
 			
-		}else {
-			return;
 		}
 	}
 

@@ -81,7 +81,7 @@ body{
 			</button>
 		</a>
 		
- 	 	<a style="text-decoration:none" href="./view_main">
+ 	 	<a style="text-decoration:none" href="./delete_project?kennung=${kennung}">
 			<button type="button" style="background-color:red; border-color:black; color:white;height:60;width:32.5%">
 				Projekt Löschen
 			</button>

@@ -52,7 +52,7 @@ body{
 		
 		<br><br>
 		
-		<a href="./view_profile?ersteller=dummy@dummy.de">
+		<a href="./view_profile?ersteller=dummy@dummy.com">
 			<button type="button" style="background-color:blue;border-color:black;color:white;height:60;width:32.5%">
 				Mein Profil
 			</button>
