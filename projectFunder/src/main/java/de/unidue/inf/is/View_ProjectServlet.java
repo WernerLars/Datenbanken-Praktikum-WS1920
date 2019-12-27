@@ -47,7 +47,7 @@ public class View_ProjectServlet extends HttpServlet{
 		Connection con = DBUtil.getExternalConnection();
 		
 		PreparedStatement ps = con.prepareStatement("SELECT P.KENNUNG, P.STATUS, P.BESCHREIBUNG, P.TITEL ,P.FINANZIERUNGSLIMIT, P.VORGAENGER , "
-				+ "K.ICON , B.NAME , S.SPENDENSUMME "
+				+ "K.ICON ,B.EMAIL , B.NAME , S.SPENDENSUMME "
 				+ "FROM DBP068.PROJEKT AS P JOIN DBP068.KATEGORIE AS K ON P.KATEGORIE = K.ID "
 				+ "JOIN DBP068.BENUTZER AS B ON P.ERSTELLER = B.EMAIL "
 				+ "LEFT OUTER JOIN (SELECT PROJEKT , SUM(SPENDENBETRAG) AS SPENDENSUMME "
@@ -65,7 +65,8 @@ public class View_ProjectServlet extends HttpServlet{
 			String titel = rs.getString("TITEL");
 			BigDecimal fl = rs.getBigDecimal("FINANZIERUNGSLIMIT");
 			String icon = rs.getString("ICON");
-			String ersteller = rs.getString("NAME");;
+			String email = rs.getString("EMAIL");
+			String ersteller = rs.getString("NAME");
 			BigDecimal spendensumme = rs.getBigDecimal("SPENDENSUMME");
 			vorgaengerkennung = rs.getInt("VORGAENGER");
 			kennung = rs.getInt("KENNUNG");
@@ -78,7 +79,7 @@ public class View_ProjectServlet extends HttpServlet{
 			}
 			
 			
-			vp = new ViewProject(status,beschreibung,titel,fl,icon,ersteller,spendensumme);
+			vp = new ViewProject(status,beschreibung,titel,fl,icon,email,ersteller,spendensumme);
 					
 
 			}
@@ -168,6 +169,7 @@ public class View_ProjectServlet extends HttpServlet{
 		req.setAttribute("titel", vp.getTitel());
 		req.setAttribute("finanzierungslimit", vp.getFinanzierungslimit());
 		req.setAttribute("icon", vp.getIcon());
+		req.setAttribute("email", vp.getEmail());
 		req.setAttribute("ersteller", vp.getErsteller());
 		req.setAttribute("spendensumme", vp.getSpendensumme());
 		req.setAttribute("kennung", kennung);

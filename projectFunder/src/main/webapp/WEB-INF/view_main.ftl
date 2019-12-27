@@ -74,7 +74,7 @@ body{
 	    </a>
 	    
 	    <h2>von:
-	    	<a href="./view_profile?ersteller=${o.ersteller}">
+	    	<a href="./view_profile?ersteller=${o.email}">
 				${o.ersteller}</a>
 		</h2>
 

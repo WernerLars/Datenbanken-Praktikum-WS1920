@@ -10,6 +10,7 @@ public final class ViewProject {
 	private String Titel;
 	private BigDecimal Finanzierungslimit;
 	private String Icon;
+	private String Email;
 	private String Ersteller;
 	private BigDecimal Spendensumme;
 	
@@ -17,12 +18,13 @@ public final class ViewProject {
 		
 	}
 
-	public ViewProject(String status,String beschreibung,String titel,BigDecimal fl,String icon,String ersteller,BigDecimal ss) {
+	public ViewProject(String status,String beschreibung,String titel,BigDecimal fl,String icon,String email,String ersteller,BigDecimal ss) {
 		this.Status = status;
 		this.Beschreibung = beschreibung;
 		this.Titel = titel;
 		this.Finanzierungslimit = fl;
 		this.Icon = icon;
+		this.Email = email;
 		this.Ersteller = ersteller;
 		this.Spendensumme = ss;
 		
@@ -48,7 +50,11 @@ public final class ViewProject {
 	public String getIcon() {
 		return Icon;
 	}
-
+	
+	public String getEmail() {
+		return Email;
+	}
+	
 	public String getErsteller() {
 		return Ersteller;
 	}

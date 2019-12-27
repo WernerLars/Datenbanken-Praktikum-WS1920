@@ -52,7 +52,7 @@ body{
 
 	<h2>${titel}</h2>
 
-	<h3>von: <a href="./view_profile?ersteller=${ersteller}" >
+	<h3>von: <a href="./view_profile?ersteller=${email}" >
 			 ${ersteller}</a>
 	</h3>
 	

@@ -34,7 +34,7 @@ public final class View_MainServlet extends HttpServlet{
 		try {
 		Connection con = DBUtil.getExternalConnection();
 		
-		PreparedStatement ps = con.prepareStatement("SELECT P.STATUS, P.KENNUNG, P.TITEL , K.ICON , B.NAME , S.SPENDENSUMME "
+		PreparedStatement ps = con.prepareStatement("SELECT P.STATUS, P.KENNUNG, P.TITEL , K.ICON ,B.EMAIL , B.NAME , S.SPENDENSUMME "
 				+ "FROM DBP068.PROJEKT AS P JOIN DBP068.KATEGORIE AS K ON P.KATEGORIE = K.ID "
 				+ "JOIN DBP068.BENUTZER AS B ON P.ERSTELLER = B.EMAIL "
 				+ "LEFT OUTER JOIN (SELECT PROJEKT , SUM(SPENDENBETRAG) AS SPENDENSUMME "
@@ -49,7 +49,8 @@ public final class View_MainServlet extends HttpServlet{
 		    String status = rs.getString("STATUS");
 		    int kennung = rs.getInt("KENNUNG");
 			String titel = rs.getString("TITEL");
-			String icon = rs.getString("ICON");			
+			String icon = rs.getString("ICON");
+			String email = rs.getString("EMAIL");
 			String name = rs.getString("NAME");
 			BigDecimal spendensumme = rs.getBigDecimal("SPENDENSUMME");
 			
@@ -58,7 +59,7 @@ public final class View_MainServlet extends HttpServlet{
 			}
 			
 			
-			ViewProjectMain vp = new ViewProjectMain(kennung,titel,icon,name,spendensumme);
+			ViewProjectMain vp = new ViewProjectMain(kennung,titel,icon,email,name,spendensumme);
 
 			if(status.equals("offen")) {
 

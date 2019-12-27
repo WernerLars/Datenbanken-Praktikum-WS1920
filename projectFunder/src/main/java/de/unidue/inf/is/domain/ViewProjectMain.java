@@ -7,6 +7,7 @@ public final class ViewProjectMain {
 	private int Kennung;
 	private String Titel;
 	private String Icon;
+	private String Email;
 	private String Ersteller;
 	private BigDecimal Spendensumme;
 	
@@ -14,10 +15,11 @@ public final class ViewProjectMain {
 		
 	}
 	
-	public ViewProjectMain(int kennung,String titel,String icon,String ersteller, BigDecimal spendensumme) {
+	public ViewProjectMain(int kennung,String titel,String icon,String email,String ersteller, BigDecimal spendensumme) {
 		this.Kennung = kennung;
 		this.Titel = titel;
 		this.Icon = icon;
+		this.Email = email;
 		this.Ersteller = ersteller;
 		this.Spendensumme = spendensumme;
 		
@@ -34,7 +36,11 @@ public final class ViewProjectMain {
 	public String getIcon() {
 		return Icon;
 	}
-
+	
+	public String getEmail() {
+		return Email;
+	}
+	
 	public String getErsteller() {
 		return Ersteller;
 	}
