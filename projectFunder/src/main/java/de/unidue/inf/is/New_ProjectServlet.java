@@ -157,6 +157,8 @@ public final class New_ProjectServlet extends HttpServlet {
 				
 				// Execute insert statement
 				psInsert.executeUpdate();
+				
+				resp.sendRedirect("view_main");
 			} catch (Exception e) {
 				showPage(req, resp, "Datenbankfehler:<br>" + e.getMessage() + "<br>");
 			}
