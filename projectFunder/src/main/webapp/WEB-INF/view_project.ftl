@@ -52,7 +52,7 @@ body{
 
 	<h2>${titel}</h2>
 
-	<h3>von: <a href="./view_profile?ersteller=${ersteller}" target="_blank">
+	<h3>von: <a href="./view_profile?ersteller=${ersteller}" >
 			 ${ersteller}</a>
 	</h3>
 	
@@ -75,19 +75,19 @@ body{
 	<br><br>
 	
 
- 		 <a style="text-decoration:none" href="./new_project_fund" target="_blank">
+ 		 <a style="text-decoration:none" href="./new_project_fund">
 			<button type="button" style="background-color:green; border-color:black; color:white;height:60;width:32.5%">
 				Spenden
 			</button>
 		</a>
 		
- 	 	<a style="text-decoration:none" href="./view_main" target="_blank">
+ 	 	<a style="text-decoration:none" href="./view_main">
 			<button type="button" style="background-color:red; border-color:black; color:white;height:60;width:32.5%">
 				Projekt Löschen
 			</button>
 		</a>
 		
- 		 <a style="text-decoration:none" href="./edit_project" target="_blank">
+ 		 <a style="text-decoration:none" href="./edit_project">
 			<button type="button" style="background-color:blue; border-color:black; color:white;height:60;width:32.5%">
 				Projekt editieren
 			</button>
@@ -123,7 +123,7 @@ body{
 
 	<br><br>
 	<div align="right">
-			<a style="text-decoration:none" href="./new_comment" target="_blank">
+			<a style="text-decoration:none" href="./new_comment">
 				<button type="button" style="background-color:blue; border-color:black; color:white;height:60;width:32.5%">
 					Kommentieren
 				</button>

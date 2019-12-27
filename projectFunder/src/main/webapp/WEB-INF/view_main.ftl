@@ -52,7 +52,7 @@ body{
 		
 		<br><br>
 		
-		<a href="./view_profile?ersteller=dummy@dummy.de" target="_blank">
+		<a href="./view_profile?ersteller=dummy@dummy.de">
 			<button type="button" style="background-color:blue;border-color:black;color:white;height:60;width:32.5%">
 				Mein Profil
 			</button>
@@ -69,12 +69,12 @@ body{
 		<br><br>
 	  
 	    <img src="${o.icon}" alt="icon" >
-	    <a href="./view_project?kennung=${o.kennung}" target="_blank">
+	    <a href="./view_project?kennung=${o.kennung}">
 	    	<h2>${o.titel}</h2>
 	    </a>
 	    
 	    <h2>von:
-	    	<a href="./view_profile?ersteller=${o.ersteller}" target="_blank">
+	    	<a href="./view_profile?ersteller=${o.ersteller}">
 				${o.ersteller}</a>
 		</h2>
 
@@ -100,11 +100,11 @@ body{
 
 	    
 	    <img src="${g.icon}" alt="icon">
-	    <a href="./view_project?kennung=${g.kennung}" target="_blank">
+	    <a href="./view_project?kennung=${g.kennung}">
 	    	<h2>${g.titel}</h2>
 	    </a>
 	    
-	    <h2>von: <a href="./view_profile?ersteller=${g.ersteller}" target="_blank">
+	    <h2>von: <a href="./view_profile?ersteller=${g.ersteller}" >
 				${g.ersteller} </a>
 		</h2>
 
@@ -119,7 +119,7 @@ body{
     	
 		<br><br>
 		<div align="right">
-			<a style="text-decoration:none" href="./new_project" target="_blank">
+			<a style="text-decoration:none" href="./new_project">
 				<button type="button" style="background-color:blue; border-color:black; color:white;height:60;width:32.5%">
 					Projekt erstellen
 				</button>
