@@ -60,13 +60,23 @@ body{
 	
 	<br><br>
 	
+	<#list erstpro as e>
+		
+		<img src="${e.icon}" alt="icon" >
+		
+		<h2><a href="./view_project?kennung=${e.kennung}" >
+			 ${e.titel}</a>
+		</h2>
+		<h2>Aktuell: ${e.spendensumme}</h2>
+		<h2>Status: ${e.status}</h2>
+		
+		<br><br>
+		<hr>
+		<br><br>
+		
+	</#list>
+	
 
-	
-	
-	
-	
-	
-	
 	
 	<br><br>
 	
@@ -76,7 +86,22 @@ body{
 	
 	<br><br>
 	
-	
+		<#list unpro as o>
+		
+		<img src="${o.icon}" alt="icon" >
+		
+		<h2><a href="./view_project?kennung=${o.kennung}" >
+			 ${o.titel}</a>
+		</h2>
+		<h2>Limit: ${o.finanzierungslimit}</h2>
+		<h2>Status: ${o.status}</h2>
+		<h2>Gespendet: ${o.spendenbetrag}</h2>
+		
+		<br><br>
+		<hr>
+		<br><br>
+		
+	</#list>
 
 
 
