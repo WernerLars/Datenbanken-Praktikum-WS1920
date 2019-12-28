@@ -47,15 +47,16 @@
 			</div>
 			<div id="site">
 				${errorMsg}
-				<form action="new_project" method="post">
+				<form action="edit_project?kennung=${project["kennung"]}" method="post">
+					<input type="hidden" name="id" value=${project["kennung"]}></input>
 					<table>
 						<tr>
 							<td>Titel</td>
-							<td><input type="text" name="title" value=${title}></td>
+							<td><input type="text" name="title" value=${project["titel"]}></td>
 						</tr>
 						<tr>
 							<td>Finanzierungslimit</td>
-							<td><input type="text" name="limit" value=${limit}> €</td>
+							<td><input type="text" name="limit" value=${project["finanzierungslimit"]}> €</td>
 						</tr>
 						<tr>
 							<td>Kategorie</td>
@@ -69,14 +70,14 @@
 							<td>Vorgänger</td>
 							<td>
 								<input type="radio" name="pred" value="None" checked> Kein Vorgänger<br>
-								<#list projects as project>
-									<input type="radio" name="pred" value=${project["kennung"]} ${project["checked"]}> ${project["titel"]}<br>
+								<#list preds as pred>
+									<input type="radio" name="pred" value=${pred["kennung"]} ${pred["checked"]}> ${pred["titel"]}<br>
 								</#list>
 							</td>
 						</tr>
 						<tr>
 							<td>Beschreibung</td>
-							<td><textarea name="description" cols="30" rows="5">${description}</textarea></td>
+							<td><textarea name="description" cols="30" rows="5">${project["beschreibung"]}</textarea></td>
 						</tr>
 						<tr>
 							<td></td>
