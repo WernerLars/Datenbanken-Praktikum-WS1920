@@ -120,16 +120,17 @@ public class Delete_ProjectServlet extends HttpServlet{
 				}
 				
 			}catch(SQLException e) {
-				req.setAttribute("fehler", "Datenbankfehler");
-				req.getRequestDispatcher("./error_page.ftl").forward(req, resp);
+				resp.addHeader("fehler", "Datenbankfehler!");
+				req.getRequestDispatcher("./view_project?"+query).forward(req, resp);
 			}
 				
 			if(fehler) {
-				req.setAttribute("fehler", "Keine Berechtigung");
-				req.getRequestDispatcher("./error_page.ftl").forward(req, resp);
+				
+				resp.addHeader("fehler", "Keine Berechtigung!");
+				req.getRequestDispatcher("./view_project?"+query).forward(req, resp);
 				
 			}else {
-				req.getRequestDispatcher("./ok_page.ftl").forward(req, resp);	
+				resp.sendRedirect("./view_main");	
 			}
 			
 		}

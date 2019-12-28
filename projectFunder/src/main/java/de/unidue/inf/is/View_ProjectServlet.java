@@ -34,11 +34,19 @@ public class View_ProjectServlet extends HttpServlet{
 	
 	private static List<ViewSpender> spender = new ArrayList<>();
 	private static List<ViewKommentar> kommentare = new ArrayList<>();
+	
+	private String fehler;
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
 		query = req.getQueryString();
+		
+		fehler = resp.getHeader("fehler");
+		
+		if(fehler == null) {
+			fehler = "";
+		}
 
 		if(query.substring(0, 8).equals("kennung=")) {		
 		
@@ -179,6 +187,7 @@ public class View_ProjectServlet extends HttpServlet{
 		req.setAttribute("spender", spender);
 		req.setAttribute("kommentare", kommentare);
 
+		req.setAttribute("fehler", fehler);
 		
 		req.getRequestDispatcher("/view_project.ftl").forward(req, resp);
 		

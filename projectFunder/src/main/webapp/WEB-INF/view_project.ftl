@@ -73,8 +73,9 @@ body{
 		<h1> Aktionsleiste </h1>
 	</div>
 	<br><br>
-	
-
+		
+		<p style="color:red;" align="center">${fehler}</p>
+		<br><br>
  		 <a style="text-decoration:none" href="./new_project_fund">
 			<button type="button" style="background-color:green; border-color:black; color:white;height:60;width:32.5%">
 				Spenden
