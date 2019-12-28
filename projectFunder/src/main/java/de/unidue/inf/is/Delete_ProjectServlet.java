@@ -60,23 +60,21 @@ public class Delete_ProjectServlet extends HttpServlet{
 					ps.setString(1, kennung);
 					rs = ps.executeQuery();
 					
-			
-					while(rs.next()) {
-						
-						ps = con.prepareStatement("DELETE FROM DBP068.KOMMENTAR AS K "
-								+ "WHERE K.ID = ?");
-						ps.setString(1, rs.getString("KOMMENTAR"));
-						ps.executeUpdate();
-						
-					}
-					
-					
 					ps = con.prepareStatement("DELETE FROM DBP068.SCHREIBT AS S "
 							+ "WHERE S.PROJEKT = ?");
 					ps.setString(1, kennung);
 					ps.executeUpdate();
 					
-	
+			
+					while(rs.next()) {
+						
+						ps = con.prepareStatement("DELETE FROM DBP068.KOMMENTAR "
+								+ "WHERE ID = ?");
+						ps.setString(1, rs.getString("KOMMENTAR"));
+						ps.executeUpdate();
+						
+					}
+					
 					ps = con.prepareStatement("SELECT S.SPENDER , S.SPENDENBETRAG "
 							+ "FROM DBP068.SPENDEN AS S "
 							+ "WHERE S.PROJEKT = ?");
@@ -96,20 +94,22 @@ public class Delete_ProjectServlet extends HttpServlet{
 						
 					}
 					
-
 					ps = con.prepareStatement("DELETE FROM DBP068.SPENDEN AS S "
 							+ "WHERE S.PROJEKT = ?");
 					ps.setString(1, kennung);
 					ps.executeUpdate();
-					
-					
+								
+					ps = con.prepareStatement("UPDATE DBP068.PROJEKT AS P "
+							+ "SET P.VORGAENGER = NULL "
+							+ "WHERE P.VORGAENGER = ?");
+					ps.setString(1, kennung);
+					ps.executeUpdate();
 					
 					ps = con.prepareStatement("DELETE FROM DBP068.PROJEKT AS P "
 							+ "WHERE P.KENNUNG = ?");
 					ps.setString(1, kennung);
 					ps.executeUpdate();
 					
-
 					con.close();
 							
 					
