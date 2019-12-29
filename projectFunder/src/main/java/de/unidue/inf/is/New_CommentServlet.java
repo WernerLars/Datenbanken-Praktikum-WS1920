@@ -12,8 +12,11 @@ public class New_CommentServlet extends HttpServlet {
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		super.doGet(req, resp);
+		req.setAttribute("id", "1");
+		req.setAttribute("errorMsg", "");
+		req.setAttribute("name", "Ubuntu Touch Pro");
+		
+		req.getRequestDispatcher("new_comment.ftl").forward(req, resp);
 	}
 
 	@Override
