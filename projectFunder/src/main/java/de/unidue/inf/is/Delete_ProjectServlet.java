@@ -19,7 +19,6 @@ public class Delete_ProjectServlet extends HttpServlet{
 	private static final long serialVersionUID = 1L;
 	private final String USER_ID = "dummy@dummy.com";
 	
-	private String query;
 	private String kennung;
 	private String ersteller;
 	
@@ -30,14 +29,13 @@ public class Delete_ProjectServlet extends HttpServlet{
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		
 		fehler = false;
-		query = req.getQueryString();
+		kennung = req.getParameter("kennung");
 		
 
-		if(query.substring(0, 8).equals("kennung=")) {	
+		if(kennung != null) {	
 			
 			try {
 				
-				kennung = query.substring(8);
 				
 				Connection con = DBUtil.getExternalConnection();
 				
@@ -121,13 +119,13 @@ public class Delete_ProjectServlet extends HttpServlet{
 				
 			}catch(SQLException e) {
 				resp.addHeader("fehler", "Datenbankfehler!");
-				req.getRequestDispatcher("./view_project?"+query).forward(req, resp);
+				req.getRequestDispatcher("./view_project?kennung="+kennung).forward(req, resp);
 			}
 				
 			if(fehler) {
 				
 				resp.addHeader("fehler", "Keine Berechtigung!");
-				req.getRequestDispatcher("./view_project?"+query).forward(req, resp);
+				req.getRequestDispatcher("./view_project?kennung="+kennung).forward(req, resp);
 				
 			}else {
 				resp.sendRedirect("./view_main");	

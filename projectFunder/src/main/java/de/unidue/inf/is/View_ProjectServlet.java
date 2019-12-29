@@ -40,7 +40,7 @@ public class View_ProjectServlet extends HttpServlet{
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-		query = req.getQueryString();
+		query = req.getParameter("kennung");
 		
 		fehler = resp.getHeader("fehler");
 		
@@ -48,7 +48,7 @@ public class View_ProjectServlet extends HttpServlet{
 			fehler = "";
 		}
 
-		if(query.substring(0, 8).equals("kennung=")) {		
+		if(query != null) {		
 		
 		try {
 		
@@ -63,7 +63,7 @@ public class View_ProjectServlet extends HttpServlet{
 				+ "ON P.KENNUNG = S.PROJEKT "
 				+ "WHERE P.KENNUNG=?");
 		
-		ps.setString(1, query.substring(8));
+		ps.setString(1, query);
 		
 		ResultSet rs = ps.executeQuery();
 		
