@@ -42,7 +42,8 @@ public class Edit_ProjectServlet extends HttpServlet {
 			// Get the selected project details
 			res.put("kennung", Integer.toString(id));
 			res.put("titel", rs.getString("titel"));
-			res.put("beschreibung", rs.getString("beschreibung"));
+			String d = (rs.getString("beschreibung") == null) ? "" : rs.getString("beschreibung");
+			res.put("beschreibung", d);
 			res.put("finanzierungslimit", rs.getBigDecimal("finanzierungslimit").toString());
 			res.put("ersteller", rs.getString("ersteller"));
 			res.put("vorgaenger", Integer.toString(rs.getInt("vorgaenger")));
