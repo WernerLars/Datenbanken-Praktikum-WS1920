@@ -108,7 +108,6 @@
 		<url-pattern>/view_profile</url-pattern>
 	</servlet-mapping>
 	
-	
 	<servlet>
 		<servlet-name>delete_project</servlet-name>
 		<servlet-class>de.unidue.inf.is.Delete_ProjectServlet</servlet-class>
@@ -119,12 +118,15 @@
 		<url-pattern>/delete_project</url-pattern>
 	</servlet-mapping>
 	
-	
-	
-	
-	
-	
-	
+	<servlet>
+		<servlet-name>edit_project</servlet-name>
+		<servlet-class>de.unidue.inf.is.Edit_ProjectServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>edit_project</servlet-name>
+		<url-pattern>/edit_project</url-pattern>
+	</servlet-mapping>
 
 	<!-- Prevent the visiting of MVC Views from outside the servlet container. 
 		RequestDispatcher.forward/include should and will still work. Removing this 

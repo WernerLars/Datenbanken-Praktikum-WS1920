@@ -24,12 +24,12 @@ public final class New_ProjectServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private final String USER_ID = "dummy@dummy.com";
 
+	private String sqlCategories = "SELECT id, name FROM dbp068.kategorie";
+	private String sqlProjects = "SELECT kennung, titel FROM dbp068.projekt WHERE ersteller=?";
+	
 	protected void showPage(HttpServletRequest req, HttpServletResponse resp, String errorMsg) throws ServletException, IOException {
 		ArrayList<Map<String, String>> categories = new ArrayList<Map<String, String>>();
 		ArrayList<Map<String, String>> projects = new ArrayList<Map<String, String>>();
-		
-		String sqlCategories = "SELECT id, name FROM dbp068.kategorie";
-		String sqlProjects = "SELECT kennung, titel FROM dbp068.projekt WHERE ersteller=?";
 		
 		try (
 				Connection con = DBUtil.getExternalConnection();
@@ -147,6 +147,7 @@ public final class New_ProjectServlet extends HttpServlet {
 				psInsert.setBigDecimal(3, limit);
 				// Set creator
 				psInsert.setString(4, creator);
+				// Set predecessor
 				if (pred == null) {
 					psInsert.setNull(5, Types.SMALLINT);
 				} else {
@@ -160,7 +161,9 @@ public final class New_ProjectServlet extends HttpServlet {
 				
 				resp.sendRedirect("view_main");
 			} catch (Exception e) {
-				showPage(req, resp, "Datenbankfehler:<br>" + e.getMessage() + "<br>");
+				resp.sendError(500, "Datenbankfehler: " + e.getMessage());
+				e.printStackTrace();
+				return;
 			}
 		}
 	}
