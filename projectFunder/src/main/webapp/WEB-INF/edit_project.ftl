@@ -1,6 +1,6 @@
 <html>
 	<head>
-		<title>Projekt erstellen</title>
+		<title>Projekt editieren</title>
 		<style type="text/css">
 			* {
 				margin: 0;
@@ -52,17 +52,17 @@
 					<table>
 						<tr>
 							<td>Titel</td>
-							<td><input type="text" name="title" value=${project["titel"]}></td>
+							<td><input type="text" name="title" value="${project["titel"]}"></td>
 						</tr>
 						<tr>
 							<td>Finanzierungslimit</td>
-							<td><input type="text" name="limit" value=${project["finanzierungslimit"]}> €</td>
+							<td><input type="text" name="limit" value="${project["finanzierungslimit"]}"> €</td>
 						</tr>
 						<tr>
 							<td>Kategorie</td>
 							<td>
 								<#list categories as category>
-									<input type="radio" name="category" value=${category["id"]} ${category["checked"]}> ${category["name"]}<br>
+									<input type="radio" name="category" value="${category["id"]}" ${category["checked"]}> ${category["name"]}<br>
 								</#list>
 							</td>
 						</tr>
@@ -71,7 +71,7 @@
 							<td>
 								<input type="radio" name="pred" value="None" checked> Kein Vorgänger<br>
 								<#list preds as pred>
-									<input type="radio" name="pred" value=${pred["kennung"]} ${pred["checked"]}> ${pred["titel"]}<br>
+									<input type="radio" name="pred" value="${pred["kennung"]}" ${pred["checked"]}> ${pred["titel"]}<br>
 								</#list>
 							</td>
 						</tr>

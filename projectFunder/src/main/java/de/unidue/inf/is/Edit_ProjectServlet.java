@@ -6,6 +6,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -21,13 +22,38 @@ public class Edit_ProjectServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private final String USER_ID = "dummy@dummy.com";
 	
-	private String sqlTarget = "SELECT titel, beschreibung, finanzierungslimit, ersteller, vorgaenger, kategorie FROM dbp068.projekt WHERE kennung=?";
-	private String sqlPred = "SELECT kennung, titel FROM dbp068.projekt WHERE ersteller=?";
+	private String sqlPred = "SELECT kennung, titel FROM dbp068.projekt WHERE ersteller=? AND kennung<>?";
 	private String sqlCategories = "SELECT id, name FROM dbp068.kategorie";
 	private String sqlProjectExists = "SELECT count(*) AS project_exists FROM dbp068.projekt WHERE kennung=?";
-	private String sqlCreator = "SELECT count(*) AS valid FROM dbp068.projekt WHERE kennung=? AND ersteller=?";
+	private String sqlUpdate = "UPDATE dbp068.projekt SET titel=?, beschreibung=?, finanzierungslimit=?, vorgaenger=?, kategorie=? WHERE kennung=?";
+	
+	protected HashMap<String, String> getProject(int id) throws SQLException {
+		HashMap<String, String> res = new HashMap<String, String>();
+
+		try (
+				Connection con = DBUtil.getExternalConnection();
+				PreparedStatement ps = con.prepareStatement(
+						"SELECT titel, beschreibung, finanzierungslimit, ersteller, vorgaenger, kategorie FROM dbp068.projekt WHERE kennung=?")) {
+			
+			ps.setInt(1, id);
+			ResultSet rs = ps.executeQuery();
+			rs.next();
+			
+			// Get the selected project details
+			res.put("kennung", Integer.toString(id));
+			res.put("titel", rs.getString("titel"));
+			res.put("beschreibung", rs.getString("beschreibung"));
+			res.put("finanzierungslimit", rs.getBigDecimal("finanzierungslimit").toString());
+			res.put("ersteller", rs.getString("ersteller"));
+			res.put("vorgaenger", Integer.toString(rs.getInt("vorgaenger")));
+			res.put("kategorie", Integer.toString(rs.getInt("kategorie")));
+		}
+		
+		return res;
+	}
 	
 	protected void showPage(HttpServletRequest req, HttpServletResponse resp, String errorMsg) throws ServletException, IOException {
+		// Check if project id is valid and exists
 		int pid;
 		if (req.getParameter("kennung") != null) {
 			try (
@@ -55,39 +81,29 @@ public class Edit_ProjectServlet extends HttpServlet {
 			return;
 		}
 		
-		HashMap<String, String> project = new HashMap<String, String>();
+		HashMap<String, String> project;
 		ArrayList<Map<String, String>> categories = new ArrayList<Map<String, String>>();
 		ArrayList<Map<String, String>> preds = new ArrayList<Map<String, String>>();
 		
 		try (
 				Connection con = DBUtil.getExternalConnection();
-				PreparedStatement psTarget = con.prepareStatement(sqlTarget);
 				PreparedStatement psCategories = con.prepareStatement(sqlCategories);
 				PreparedStatement psProjects = con.prepareStatement(sqlPred)) {
 			
 			// Get the selected project details
-			psTarget.setInt(1, pid);
-			ResultSet rs = psTarget.executeQuery();
-			rs.next();
-			project.put("kennung", Integer.toString(pid));
-			project.put("titel", rs.getString("titel"));
-			project.put("beschreibung", rs.getString("beschreibung"));
-			project.put("finanzierungslimit", rs.getBigDecimal("finanzierungslimit").toString());
-			project.put("ersteller", rs.getString("ersteller"));
-			project.put("vorgaenger", Integer.toString(rs.getInt("vorgaenger")));
-			project.put("kategorie", Integer.toString(rs.getInt("kategorie")));
+			project = getProject(pid);
 			
 			/* Get a list of all categories for the logged in user USER_ID and add them to a
 			 * list of maps with the following keys:
 			 * "id": Unique id of each category
 			 * "name": Name of each category
 			 */
-			ResultSet resCategories = psCategories.executeQuery();
-			while (resCategories.next()) {
+			ResultSet rsCategories = psCategories.executeQuery();
+			while (rsCategories.next()) {
 				HashMap<String, String> c = new HashMap<String, String>();
 				
-				c.put("id", Integer.toString(resCategories.getInt("id")));
-				c.put("name", resCategories.getString("name"));
+				c.put("id", Integer.toString(rsCategories.getInt("id")));
+				c.put("name", rsCategories.getString("name"));
 				c.put("checked", project.get("kategorie").equals(c.get("id")) ? "checked" : "");
 				
 				categories.add(c);
@@ -99,12 +115,13 @@ public class Edit_ProjectServlet extends HttpServlet {
 			 * "titel": Title of each project
 			 */
 			psProjects.setString(1, USER_ID);
-			ResultSet resProjects = psProjects.executeQuery();
-			while (resProjects.next()) {
+			psProjects.setInt(2, pid);
+			ResultSet rsProjects = psProjects.executeQuery();
+			while (rsProjects.next()) {
 				HashMap<String, String> p = new HashMap<String, String>();
 				
-				p.put("kennung", Integer.toString(resProjects.getInt("kennung")));
-				p.put("titel", resProjects.getString("titel"));
+				p.put("kennung", Integer.toString(rsProjects.getInt("kennung")));
+				p.put("titel", rsProjects.getString("titel"));
 				p.put("checked", project.get("vorgaenger").equals(p.get("kennung")) ? "checked" : "");
 				
 				preds.add(p);
@@ -165,23 +182,21 @@ public class Edit_ProjectServlet extends HttpServlet {
 			return;
 		}
 		
-		// Creator is the current logged in user
-		String creator = USER_ID;
-		try (
-				Connection con = DBUtil.getExternalConnection();
-				PreparedStatement ps = con.prepareStatement(sqlCreator)) {
-			ps.setInt(1, id);
-			ps.setString(2, creator);
-			ResultSet rs = ps.executeQuery();
-			rs.next();
-			if (rs.getInt("valid") != 1) {
-				errorMsg += "-> Projekte dürfen nur vom Ersteller bearbeitet werden.<br>";
-				showPage(req, resp, errorMsg);
-				return;
-			}
+		// Get a HashMap of the project with the given id
+		HashMap<String, String> project;
+		try {
+			project = getProject(id);
 		} catch (SQLException e) {
 			resp.sendError(500, "Datenbankfehler: " + e.getMessage());
 			e.printStackTrace();
+			return;
+		}
+		
+		// Creator is the current logged in user
+		String creator = USER_ID;
+		if (!project.get("ersteller").equals(USER_ID)) {
+			errorMsg += "-> Projekte dürfen nur vom Ersteller bearbeitet werden.<br>";
+			showPage(req, resp, errorMsg);
 			return;
 		}
 		
@@ -198,7 +213,8 @@ public class Edit_ProjectServlet extends HttpServlet {
 		BigDecimal limit = null;
 		try {
 			limit = new BigDecimal(req.getParameter("limit"));
-			if  (limit.doubleValue() < 100) {
+			double limit_old = Double.valueOf(project.get("finanzierungslimit"));
+			if  (limit.doubleValue() < limit_old) {
 				errorMsg += "-> Zu geringes Finanzierungslimit angegeben (mindestens 100€).<br>";
 			}
 		} catch (Exception e) {
@@ -221,6 +237,44 @@ public class Edit_ProjectServlet extends HttpServlet {
 			category = Integer.valueOf(req.getParameter("category"));
 		} catch (Exception e) {
 			errorMsg += "-> Keine oder ungültige Kategorie angegeben.<br>";
+		}
+		
+		if (!errorMsg.equals("")) {
+			showPage(req, resp, errorMsg);
+		} else {
+			try (
+					Connection con = DBUtil.getExternalConnection();
+					PreparedStatement ps = con.prepareStatement(sqlUpdate)) {
+				// Set title
+				ps.setString(1, title);
+				// Set description
+				if (description == null || description.equals("")) {
+					ps.setNull(2, Types.CLOB);
+				} else {
+					ps.setString(2, description);
+				}
+				// Set limit
+				ps.setBigDecimal(3, limit);
+				// Set predecessor
+				if (pred == null) {
+					ps.setNull(4, Types.SMALLINT);
+				} else {
+					ps.setInt(4, pred);
+				}
+				// Set category
+				ps.setInt(5, category);
+				
+				// Set project id in WHERE clausel
+				ps.setInt(6, id);
+				
+				ps.executeUpdate();
+				
+				resp.sendRedirect("view_project?kennung=" + id);
+			} catch (SQLException e) {
+				resp.sendError(500, "Datenbankfehler: " + e.getMessage());
+				e.printStackTrace();
+				return;
+			}
 		}
 	}
 }
