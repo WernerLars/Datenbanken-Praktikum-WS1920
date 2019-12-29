@@ -147,6 +147,7 @@ public final class New_ProjectServlet extends HttpServlet {
 				psInsert.setBigDecimal(3, limit);
 				// Set creator
 				psInsert.setString(4, creator);
+				// Set predecessor
 				if (pred == null) {
 					psInsert.setNull(5, Types.SMALLINT);
 				} else {
