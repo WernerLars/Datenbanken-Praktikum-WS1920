@@ -1,6 +1,6 @@
 <html>
 	<head>
-		<title>Projekt erstellen</title>
+		<title>Projekt Kommentar</title>
 		<style type="text/css">
 			* {
 				margin: 0;
@@ -46,6 +46,12 @@
 				<h1>${name}</h1>
 			</div>
 			<div id="site">
+				${errorMsg}
+				<form action="new_comment?kennung=${id}" method="post">
+					<textarea name="comment" cols="40" rows="10" placeholder="Schreibe Kommentar..."></textarea><br><br>
+					<input type="checkbox" name="anonymous"> Anonym kommentieren?<br><br>
+					<input type="submit" value="Kommentar hinzufügen">
+				</form>
 			</div>
 		</div>
 	</body>
