@@ -61,7 +61,7 @@
 							<td>Kategorie</td>
 							<td>
 								<#list categories as category>
-									<input type="radio" name="category" value=${category["id"]}> ${category["name"]}<br>
+									<input type="radio" name="category" value="${category["id"]}"> ${category["name"]}<br>
 								</#list>
 							</td>
 						</tr>
@@ -70,7 +70,7 @@
 							<td>
 								<input type="radio" name="pred" value="None" checked> Kein Vorgänger<br>
 								<#list projects as project>
-									<input type="radio" name="pred" value=${project["kennung"]}> ${project["titel"]}<br>
+									<input type="radio" name="pred" value="${project["kennung"]}"> ${project["titel"]}<br>
 								</#list>
 							</td>
 						</tr>
