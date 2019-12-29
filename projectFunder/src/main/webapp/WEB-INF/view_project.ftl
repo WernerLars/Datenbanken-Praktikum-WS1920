@@ -76,7 +76,7 @@ body{
 		
 		<p style="color:red;" align="center">${fehler}</p>
 		<br><br>
- 		 <a style="text-decoration:none" href="./new_project_fund">
+ 		 <a style="text-decoration:none" href="./new_project_fund?kennung=${kennung}">
 			<button type="button" style="background-color:green; border-color:black; color:white;height:60;width:32.5%">
 				Spenden
 			</button>
@@ -88,7 +88,7 @@ body{
 			</button>
 		</a>
 		
- 		 <a style="text-decoration:none" href="./edit_project">
+ 		 <a style="text-decoration:none" href="./edit_project?kennung=${kennung}">
 			<button type="button" style="background-color:blue; border-color:black; color:white;height:60;width:32.5%">
 				Projekt editieren
 			</button>
