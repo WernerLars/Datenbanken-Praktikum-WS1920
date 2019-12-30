@@ -144,7 +144,8 @@ public class View_ProjectServlet extends HttpServlet{
 				+ "ON S.KOMMENTAR = K.ID "
 				+ "JOIN DBP068.BENUTZER AS B "
 				+ "ON S.BENUTZER = B.EMAIL "
-				+ "WHERE S.PROJEKT = ?");
+				+ "WHERE S.PROJEKT = ? "
+				+ "ORDER BY DATUM DESC");
 		
 		ps.setString(1, ""+kennung);
 		
