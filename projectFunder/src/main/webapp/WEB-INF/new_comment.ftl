@@ -43,7 +43,7 @@
 	<body>
 		<div id="wrapper">
 			<div id="header">
-				<h1>${name}</h1>
+				<h1>${title}</h1>
 			</div>
 			<div id="site">
 				${errorMsg}
