@@ -193,8 +193,7 @@ public class Edit_ProjectServlet extends HttpServlet {
 			return;
 		}
 		
-		// Creator is the current logged in user
-		String creator = USER_ID;
+		// Check if user has permissions for editing the project
 		if (!project.get("ersteller").equals(USER_ID)) {
 			errorMsg += "-> Projekte dürfen nur vom Ersteller bearbeitet werden.<br>";
 			showPage(req, resp, errorMsg);
