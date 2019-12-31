@@ -61,8 +61,8 @@ body{
 	</div>
 	<br><br>
 	
-	<h2>Finanzierungslimit: ${finanzierungslimit}</h2>
-	<h2>Aktuelle Spendensumme: ${spendensumme}</h2>
+	<h2>Finanzierungslimit: ${finanzierungslimit} &euro;</h2>
+	<h2>Aktuelle Spendensumme: ${spendensumme} &euro;</h2>
 	<h2>Status: ${status}</h2>
 
 	<h2>Vorgänger-Projekt: ${code} </h2>
@@ -104,7 +104,7 @@ body{
 	<br><br>
 	
 	<#list spender as s>
-		<h2>${s.name}: ${s.spendenbetrag}  </h2>
+		<h2>${s.name}: ${s.spendenbetrag} &euro; </h2>
 	
 	</#list>
 	
@@ -124,7 +124,7 @@ body{
 
 	<br><br>
 	<div align="right">
-			<a style="text-decoration:none" href="./new_comment">
+			<a style="text-decoration:none" href="./new_comment?kennung=${kennung}">
 				<button type="button" style="background-color:blue; border-color:black; color:white;height:60;width:32.5%">
 					Kommentieren
 				</button>
