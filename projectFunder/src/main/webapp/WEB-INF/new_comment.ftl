@@ -47,7 +47,7 @@
 			</div>
 			<div id="site">
 				${errorMsg}
-				<form action="new_comment?kennung=${id}" method="post">
+				<form action="new_comment?kennung=${pid}" method="post">
 					<textarea name="comment" cols="40" rows="10" placeholder="Schreibe Kommentar..."></textarea><br><br>
 					<input type="checkbox" name="anonymous"> Anonym kommentieren?<br><br>
 					<input type="submit" value="Kommentar hinzufügen">
