@@ -48,15 +48,15 @@
 		<url-pattern>*.ftl</url-pattern>
 	</servlet-mapping>
 	
-<!-- 	<servlet> -->
-<!-- 		<servlet-name>view_home_servlet</servlet-name> -->
-<!-- 		<servlet-class>de.unidue.inf.is.View_MainServlet</servlet-class> -->
-<!-- 	</servlet> -->
+	<servlet>
+		<servlet-name>view_home_servlet</servlet-name>
+		<servlet-class>de.unidue.inf.is.View_MainServlet</servlet-class>
+	</servlet>
 	
-<!-- 	<servlet-mapping> -->
-<!-- 		<servlet-name>view_home_servlet</servlet-name> -->
-<!-- 		<url-pattern>/</url-pattern> -->
-<!-- 	</servlet-mapping> -->
+	<servlet-mapping>
+		<servlet-name>view_home_servlet</servlet-name>
+		<url-pattern></url-pattern>
+	</servlet-mapping>
 	
 	<servlet>
 		<servlet-name>view_main_servlet</servlet-name>
