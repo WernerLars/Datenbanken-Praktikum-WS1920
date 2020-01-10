@@ -2,16 +2,14 @@ package de.unidue.inf.is.domain;
 
 import java.math.BigDecimal;
 
-public final class ViewSpender {
+public final class ViewProjectDonator {
 
 	BigDecimal Spendenbetrag;
 	String Name;
 	
-	public ViewSpender() {
-		
-	}
+	public ViewProjectDonator() {}
 	
-	public ViewSpender(BigDecimal sb,String n) {
+	public ViewProjectDonator(BigDecimal sb,String n) {
 		this.Spendenbetrag = sb;
 		this.Name = n;
 	}

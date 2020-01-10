@@ -65,7 +65,7 @@ body{
 	<h2>Aktuelle Spendensumme: ${spendensumme} &euro;</h2>
 	<h2>Status: ${status}</h2>
 
-	<h2>Vorgänger-Projekt: ${code} </h2>
+	<h2>Vorgänger-Projekt: ${htmlcode} </h2>
 
 	
 	<br><br>

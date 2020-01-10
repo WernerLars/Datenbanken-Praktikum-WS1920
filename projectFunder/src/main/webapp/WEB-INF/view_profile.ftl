@@ -49,8 +49,8 @@ body{
 	<br><br>
 	
 	<h2>Benutzername: ${name} </h2>
-	<h2>Anzahl erstellter Projekte: ${anzerprojekte} </h2>
-	<h2>Anzahl unterstützte Projekte: ${anzunprojekte} </h2>
+	<h2>Anzahl erstellter Projekte: ${numberCreatedProjects} </h2>
+	<h2>Anzahl unterstützte Projekte: ${numberSupportedProjects} </h2>
 	
 	<br><br>
 	
@@ -60,7 +60,7 @@ body{
 	
 	<br><br>
 	
-	<#list erstpro as e>
+	<#list createdProjects as e>
 		
 		<img src="${e.icon}" alt="icon" >
 		
@@ -86,7 +86,7 @@ body{
 	
 	<br><br>
 	
-		<#list unpro as o>
+		<#list supportedProjects as o>
 		
 		<img src="${o.icon}" alt="icon" >
 		

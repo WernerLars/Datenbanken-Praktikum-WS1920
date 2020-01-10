@@ -38,12 +38,9 @@ body{
 }
 
 
-
 </style>
 	
-	
-	
-	
+
 	<body>
 	<div id="wrapper">	
 		<div id="header">
@@ -64,7 +61,7 @@ body{
 		</div>
 
 
-	    <#list offene_Projekte as o>
+	    <#list openProjects as o>
 	    
 		<br><br>
 	  
@@ -95,7 +92,7 @@ body{
 		<br><br>
 
 		
-		<#list geschlossene_Projekte as g>
+		<#list closedProjects as g>
 	    <br><br>
 
 	    

@@ -2,50 +2,50 @@ package de.unidue.inf.is.domain;
 
 import java.math.BigDecimal;
 
-public class ViewProfileErstPro {
-
+public class ViewProfileSupportedProjects{
+	
 	private String Icon;
 	private int Kennung;
 	private String Titel;
-	private BigDecimal Spendensumme;
+	private BigDecimal Finanzierungslimit;
 	private String Status;
+	private BigDecimal Spendenbetrag;
 	
-	public ViewProfileErstPro() {
+	public ViewProfileSupportedProjects() {
 		
 	}
 	
-	public ViewProfileErstPro(String i ,int k, String t , BigDecimal sp , String st) {
+	public ViewProfileSupportedProjects(String i,int k, String t,BigDecimal f,String st,BigDecimal sp) {
 		this.Icon = i;
 		this.Kennung = k;
 		this.Titel = t;
-		this.Spendensumme = sp;
+		this.Finanzierungslimit = f;
 		this.Status = st;
+		this.Spendenbetrag = sp;
 	}
 
 	public String getIcon() {
 		return Icon;
 	}
-	
 	public int getKennung() {
 		return Kennung;
 	}
-	
+
 	public String getTitel() {
 		return Titel;
 	}
 
-	public BigDecimal getSpendensumme() {
-		return Spendensumme;
+	public BigDecimal getFinanzierungslimit() {
+		return Finanzierungslimit;
 	}
 
 	public String getStatus() {
 		return Status;
 	}
-	
-	
-	
-	
-	
+
+	public BigDecimal getSpendenbetrag() {
+		return Spendenbetrag;
+	}
 	
 	
 	
