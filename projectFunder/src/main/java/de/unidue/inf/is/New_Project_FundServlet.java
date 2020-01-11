@@ -24,41 +24,58 @@ public class New_Project_FundServlet extends HttpServlet{
 	private String kennung;
 	private String titel;
 	private String status;
-	
 	private String fehlercode;
-	private boolean fehler;
 	
-	private BigDecimal spendenbetrag;
-	private String sichtbarkeit;
+	private String sqlGetProject = "SELECT P.TITEL,P.STATUS FROM DBP068.PROJEKT AS P "
+			+ "WHERE P.KENNUNG = ?";
 	
+	private String sqlGetCredit = "SELECT K.GUTHABEN FROM DBP068.KONTO AS K "
+			+ "WHERE K.INHABER = ?";
 	
+	private String sqlHasDonated = "SELECT S.SPENDER FROM DBP068.SPENDEN AS S WHERE "
+			+ "S.PROJEKT = ? AND S.SPENDER = ? ";
+	
+	private String sqlInsertDonation = "INSERT INTO DBP068.SPENDEN (spender,projekt,spendenbetrag,sichtbarkeit) "
+			+ "VALUES (?,?,?,?)";
+		
+	private String sqlUpdateAccount = "UPDATE DBP068.KONTO AS K "
+			+ "SET K.GUTHABEN = K.GUTHABEN - ? "
+			+ "WHERE K.INHABER = ?";
+	
+	private String sqlGetLimitAndSum = "SELECT P.FINANZIERUNGSLIMIT , SB.SPENDENSUMME "
+			+ "FROM DBP068.PROJEKT AS P "
+			+ "JOIN (SELECT S.PROJEKT , SUM(S.SPENDENBETRAG) AS SPENDENSUMME "
+			+ "FROM DBP068.SPENDEN AS S "
+			+ "GROUP BY S.PROJEKT) AS SB "
+			+ "ON P.KENNUNG = SB.PROJEKT "
+			+ "WHERE P.KENNUNG = ?";
+	
+	private String sqlUpdateStatus = "UPDATE DBP068.PROJEKT AS P "
+			+ "SET P.STATUS = ? "
+			+ "WHERE P.KENNUNG = ?";
+						
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		
-		
+				
 		kennung = req.getParameter("kennung");
-	
-
+		
 		if(fehlercode == null) {
 			fehlercode = " ";
 		}
 		
 		if(kennung != null) {
 			
-			try {
-								
-				Connection con = DBUtil.getExternalConnection();
-
-				PreparedStatement ps = con.prepareStatement("SELECT P.TITEL,P.STATUS FROM DBP068.PROJEKT AS P "
-						+ "WHERE P.KENNUNG = ?");			
-				ps.setString(1, kennung);			
-				ResultSet rs = ps.executeQuery();			
-				rs.next();
-				titel = rs.getString("TITEL");
-				status = rs.getString("STATUS");
+			try(Connection con = DBUtil.getExternalConnection();
+				PreparedStatement getProject = con.prepareStatement(sqlGetProject)) {
+										
+				getProject.setString(1, kennung);			
+				ResultSet rs = getProject.executeQuery();	
 				
-				con.close();
-					
+				while(rs.next()) {
+					titel = rs.getString("TITEL");
+					status = rs.getString("STATUS");
+				}
+							
 			}catch(SQLException e) {
 				e.printStackTrace();
 			}
@@ -73,77 +90,84 @@ public class New_Project_FundServlet extends HttpServlet{
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		
-		spendenbetrag = new BigDecimal(req.getParameter("spende"));
-		sichtbarkeit = req.getParameter("anonym");
-		fehler = false;
+		BigDecimal guthaben = new BigDecimal("0");
+		BigDecimal spendenbetrag = new BigDecimal(req.getParameter("spende"));
+		
+		String sichtbarkeit = req.getParameter("anonym");
+		
+		if(sichtbarkeit == null) {
+			sichtbarkeit = "oeffentlich";
+		}else {
+			sichtbarkeit = "privat";
+		}	
+		
+		BigDecimal finanzierungslimit = new BigDecimal("0");
+		BigDecimal spendensumme = new BigDecimal("0");
+			
+		boolean fehler = false;
 		
 		if(status.equals("offen")) {
+			
 			if(spendenbetrag.compareTo(BigDecimal.ZERO) > 0 ) {
 				
-				try {
+				try(Connection con = DBUtil.getExternalConnection();
+					PreparedStatement getCredit = con.prepareStatement(sqlGetCredit);
+					PreparedStatement hasDonated = con.prepareStatement(sqlHasDonated)) {
 					
-					Connection con = DBUtil.getExternalConnection();
+					getCredit.setString(1, USER_ID);
+					ResultSet rs = getCredit.executeQuery();
 					
-					PreparedStatement ps = con.prepareStatement("SELECT K.GUTHABEN FROM DBP068.KONTO AS K "
-							+ "WHERE K.INHABER = ?");
-					ps.setString(1, USER_ID);
-					ResultSet rs = ps.executeQuery();
-					rs.next();
-					BigDecimal guthaben = rs.getBigDecimal("GUTHABEN");
+					while(rs.next()) {
+						guthaben = rs.getBigDecimal("GUTHABEN");
+					}
 					
 					if(guthaben.compareTo(spendenbetrag) >= 0) {
 								
-						if(sichtbarkeit == null) {
-							sichtbarkeit = "oeffentlich";
-						}else {
-							sichtbarkeit = "privat";
-						}	
+						hasDonated.setString(1, kennung);
+						hasDonated.setString(2, USER_ID);
+						rs = hasDonated.executeQuery();
 						
-						ps = con.prepareStatement("SELECT S.SPENDER FROM DBP068.SPENDEN AS S WHERE "
-								+ "S.PROJEKT = ? AND S.SPENDER = ? ");
-						ps.setString(1, kennung);
-						ps.setString(2, USER_ID);
-						rs = ps.executeQuery();
 						if(rs.next() == false) {
 							
-							ps = con.prepareStatement("INSERT INTO DBP068.SPENDEN (spender,projekt,spendenbetrag,sichtbarkeit) "
-									+ "VALUES (?,?,?,?)");
-							ps.setString(1, USER_ID);
-							ps.setString(2, kennung);
-							ps.setBigDecimal(3, spendenbetrag);
-							ps.setString(4, sichtbarkeit);
-							ps.executeUpdate();
-							
-							ps = con.prepareStatement("UPDATE DBP068.KONTO AS K "
-									+ "SET K.GUTHABEN = K.GUTHABEN - ? "
-									+ "WHERE K.INHABER = ?");
-							ps.setBigDecimal(1, spendenbetrag);
-							ps.setString(2, USER_ID);
-							ps.executeUpdate();
-							
-							ps = con.prepareStatement("SELECT P.FINANZIERUNGSLIMIT , SB.SPENDENSUMME "
-									+ "FROM DBP068.PROJEKT AS P "
-									+ "JOIN (SELECT S.PROJEKT , SUM(S.SPENDENBETRAG) AS SPENDENSUMME "
-									+ "FROM DBP068.SPENDEN AS S "
-									+ "GROUP BY S.PROJEKT) AS SB "
-									+ "ON P.KENNUNG = SB.PROJEKT "
-									+ "WHERE P.KENNUNG = ?");
-							ps.setString(1, kennung);
-							rs = ps.executeQuery();
-							rs.next();
-							BigDecimal fl = rs.getBigDecimal("FINANZIERUNGSLIMIT");
-							BigDecimal ss = rs.getBigDecimal("SPENDENSUMME");
-							
-							if(ss.compareTo(fl) >= 0) {
+							try(PreparedStatement insertDonation = con.prepareStatement(sqlInsertDonation);
+								PreparedStatement updateAccount = con.prepareStatement(sqlUpdateAccount);
+								PreparedStatement getLimitAndSum = con.prepareStatement(sqlGetLimitAndSum);
+								PreparedStatement updateStatus = con.prepareStatement(sqlUpdateStatus)){
 								
-								ps = con.prepareStatement("UPDATE DBP068.PROJEKT AS P "
-										+ "SET P.STATUS = ? "
-										+ "WHERE P.KENNUNG = ?");
-								ps.setString(1, "geschlossen");
-								ps.setString(2, kennung);
-								ps.executeUpdate();							
+								con.setAutoCommit(false);
+								
+								insertDonation.setString(1, USER_ID);
+								insertDonation.setString(2, kennung);
+								insertDonation.setBigDecimal(3, spendenbetrag);
+								insertDonation.setString(4, sichtbarkeit);
+								insertDonation.executeUpdate();
+								
+								updateAccount.setBigDecimal(1, spendenbetrag);
+								updateAccount.setString(2, USER_ID);
+								updateAccount.executeUpdate();
+								
+								getLimitAndSum.setString(1, kennung);
+								rs = getLimitAndSum.executeQuery();
+								
+								while(rs.next()) {
+									finanzierungslimit = rs.getBigDecimal("FINANZIERUNGSLIMIT");
+									spendensumme = rs.getBigDecimal("SPENDENSUMME");
+								}
+								
+								if(spendensumme.compareTo(finanzierungslimit) >= 0) {
+									updateStatus.setString(1, "geschlossen");
+									updateStatus.setString(2, kennung);
+									updateStatus.executeUpdate();							
+								}
+					
+								con.commit();
+								
+							}catch(SQLException e) {
+								con.rollback();
+								fehlercode = "Datenbankfehler!";
+								resp.sendRedirect("./new_project_fund?kennung="+kennung);
 							}
-				
+		
 						}else {
 							fehler = true;
 							fehlercode = "Sie haben schon für dieses Projekt gespendet!";
@@ -154,20 +178,15 @@ public class New_Project_FundServlet extends HttpServlet{
 						fehlercode = "Kontoguthaben nicht ausreichend!";					
 					}
 					
-					con.close();
-					
 				}catch(SQLException e) {
-					e.printStackTrace();
+					fehlercode = "Datenbankfehler!";
+					resp.sendRedirect("./new_project_fund?kennung="+kennung);
 				}
 				
-				if(fehler == true) {
-					
-					resp.sendRedirect("./new_project_fund?kennung="+kennung);	
-					
-				}else {
-					
-					resp.sendRedirect("./view_project?kennung="+kennung);	
-					
+				if(fehler) {				
+					resp.sendRedirect("./new_project_fund?kennung="+kennung);					
+				}else {				
+					resp.sendRedirect("./view_project?kennung="+kennung);					
 				}						
 				
 			}else {		
@@ -177,22 +196,6 @@ public class New_Project_FundServlet extends HttpServlet{
 		}else {
 			fehlercode = "Status des Projektes ist geschlossen!";
 			resp.sendRedirect("./new_project_fund?kennung="+kennung);	
-		}
-		
+		}		
 	}
-
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 }
